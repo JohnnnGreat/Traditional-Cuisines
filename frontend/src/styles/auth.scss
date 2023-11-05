@@ -1,0 +1,105 @@
+$auth-text: #000;
+$primary-color: #e59700;
+$p-input: 1rem 0.8rem;
+$semi-gray: #7c7c7c;
+
+.auth {
+  height: 100vh;
+
+  .auth-grid {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    height: 100%;
+
+    .second-section {
+      background: $primary-color;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+
+      .auth-img {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .auth_content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(3px);
+        padding: 1.3rem;
+
+        .auth_content-main_header {
+          color: #fff;
+          font-size: calc(36px / 16px) + rem;
+          line-height: 1;
+        }
+
+        .auth_content-main_desc {
+          color: #fff;
+          font-size: 1rem;
+          font-weight: 300;
+          margin-top: 1rem;
+        }
+      }
+    }
+
+    .first-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      div {
+        width: 500px;
+        .auth_main-txt {
+          font-size: calc(64px / 16px) + rem;
+          color: $auth-text;
+          font-weight: 500;
+        }
+
+        input {
+          margin-top: 1rem;
+          padding: $p-input;
+          background-color: #f6f6f6;
+          width: 100%;
+          outline: none;
+          border-radius: 5px;
+          font-weight: 200;
+        }
+
+        .link-sub {
+          width: 100%;
+          background-color: $primary-color;
+          padding: $p-input;
+          display: block;
+          margin-top: 1rem;
+          border-radius: 5px;
+          text-align: center;
+          color: #fff;
+          font-size: calc(20px / 16px) + rem;
+        }
+
+        .alt-link {
+          text-align: center;
+          margin-top: 1rem;
+          color: $semi-gray;
+
+          .link-alt {
+            text-decoration: underline;
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+}
