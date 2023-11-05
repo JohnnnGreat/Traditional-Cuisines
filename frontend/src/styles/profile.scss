@@ -1,0 +1,40 @@
+$auth-text: #000;
+$primary-color: #e59700;
+$p-input: 1rem 0.8rem;
+$semi-gray: #7c7c7c;
+
+.profile_details {
+  padding: 3rem 0;
+
+  .profile_details_wrapper {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+
+    .profile_grid {
+      display: grid;
+      grid-template-columns: 40% 60%;
+      gap: 1rem;
+      .profile-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .profile-details-con {
+        h1 {
+          font-size: calc(20px / 16px) + rem;
+          color: #424242;
+        }
+
+        .profile-name {
+          font-size: calc(30px / 16px) + rem !important;
+        }
+
+        .instance-details {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}

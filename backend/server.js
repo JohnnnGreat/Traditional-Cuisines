@@ -15,13 +15,13 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
-app.use(require);
+
 app.use("/users", userRoutes);
 
 app.use(error);
-app.get("/", (req, res, next) => {
-  error(req, res, next), res.send("Server Running");
-});
+// app.get("/", (req, res, next) => {
+//   error(req, res, next), res.send("Server Running");
+// });
 
 (async function () {
   await connectToDb();

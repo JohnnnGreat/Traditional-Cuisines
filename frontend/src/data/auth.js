@@ -1,4 +1,4 @@
-const auth = {
+export const auth = {
   register: {
     path: "/auth/login",
     text: "Register",
@@ -12,4 +12,24 @@ const auth = {
   },
 };
 
-export default auth;
+export const nav = [
+  {
+    name: "Home",
+    path: "/",
+  },
+
+  {
+    name: "About Us",
+    path: "/aboutus",
+  },
+
+  {
+    name: "Cuisines",
+    path: "/cuisines",
+  },
+
+  {
+    name: "Blog",
+    path: "/blog",
+  },
+];

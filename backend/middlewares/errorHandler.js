@@ -1,6 +1,6 @@
 const error = (err, req, res, next) => {
-  console.log(err);
-  res.status(200).json({ message: "Hello" });
+  const statusCode = err.statusCode || 404;
+  res.status(statusCode).json({ message: err.message });
 };
 
 module.exports = {
