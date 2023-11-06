@@ -47,7 +47,21 @@ const Register = async (req, res, next) => {
   }
 };
 
+const GetUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user)
+      throw new Error("An Unexpected error occured while fetching data");
+
+    return res.status(200).json({ success: true, userData: user });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 module.exports = {
   Login,
   Register,
+  GetUser,
 };
