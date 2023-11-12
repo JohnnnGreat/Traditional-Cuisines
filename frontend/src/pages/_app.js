@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "@/styles/auth.scss";
 import "@/styles/utils.scss";
 import "@/styles/profile.scss";
+import "@/styles/index.scss";
 
 import Header from "@/layout/Header";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AuthImage from "../../public/AuthImage.png";
 import Image from "next/image";
@@ -7,8 +7,10 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import AxiosInstance from "../axiosInstance";
 import { useRouter } from "next/router";
+import Preloader from "./Preloader";
 
 const Authentication = ({ registerSec, data }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
     register,
@@ -24,17 +26,25 @@ const Authentication = ({ registerSec, data }) => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      router.push("/");
+    }
+  }, []);
+
   const submitHandler = async (value) => {
+    setIsLoading(true);
     try {
       if (registerSec) {
         const response = await AxiosInstance.post("/users/register", value);
-
+        setIsLoading(false);
         const { token, data, message, success } = response.data;
         console.log(token, data, message, success);
         toast.success(message);
         console.log(response.data);
+        console.log(data);
         localStorage.setItem("data", JSON.stringify(data));
-        localStorage.setItem("token", token);
+        // localStorage.setItem("token", token);
 
         if (success) {
           router.push("/auth/login");
@@ -45,11 +55,12 @@ const Authentication = ({ registerSec, data }) => {
           email,
           password,
         });
-
+        setIsLoading(false);
         const { token, data, message, success } = response.data;
         console.log(token, data, message, success);
         toast.success(message);
         console.log(response.data);
+
         localStorage.setItem("data", JSON.stringify(data));
         localStorage.setItem("token", token);
 
@@ -58,12 +69,14 @@ const Authentication = ({ registerSec, data }) => {
         }
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
       toast.error(error?.response?.data.message);
     }
   };
   return (
     <>
+      {isLoading && <Preloader />}
       <Toaster />
       <section className="auth">
         <div className="auth-grid">

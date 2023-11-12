@@ -37,12 +37,23 @@ const Register = async (req, res, next) => {
     if (user) throw new Error("User already exist");
 
     const hashedPassword = await brcrypt.hash(password, 12);
-    await User.create({ fullName, email, password: hashedPassword });
-
-    return res
-      .status(201)
-      .json({ success: true, message: "User added Suucessfully" });
+    const userAdded = await User.create({
+      fullName,
+      email,
+      password: hashedPassword,
+    });
+    const token = await jwt.sign(
+      { userId: userAdded._id },
+      process.env.JWTTOkEN
+    );
+    return res.status(201).json({
+      success: true,
+      message: "User added Suucessfully",
+      data: userAdded,
+      token,
+    });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

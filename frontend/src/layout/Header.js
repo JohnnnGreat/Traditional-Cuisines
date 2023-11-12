@@ -1,14 +1,16 @@
 import React, { isValidElement, useEffect, useState } from "react";
 import { nav } from "@/data/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [isValidated, setIsValidated] = useState(false);
   const [userProfilePic, setUserProfilePic] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      if (JSON.parse(localStorage.getItem("data"))) {
+      if (localStorage.getItem("data")) {
         setIsValidated(true);
 
         const user = JSON.parse(localStorage.getItem("data"));
@@ -22,6 +24,13 @@ const Header = () => {
       setIsValidated(false);
     }
   });
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("data");
+
+    router.push("/auth/login");
+  };
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -48,7 +57,10 @@ const Header = () => {
                 Signup
               </Link>
             ) : (
-              <div>Logout</div>
+              <div className="logout">
+                <img src={userProfilePic} alt="user profile pic" />
+                <button onClick={handleLogout}>Logout</button>
+              </div>
             )}
           </div>
         </div>
