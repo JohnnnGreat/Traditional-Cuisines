@@ -91,3 +91,90 @@ $semi-gray: #7c7c7c;
     }
   }
 }
+
+//Search Section
+.search {
+  padding: 3rem 0;
+  overflow: hidden;
+
+  &__wrapper {
+    max-width: 1200px;
+    margin: auto;
+
+    .search-title {
+      line-height: 3;
+      font-size: 3rem;
+
+      span {
+        color: $primary-color;
+      }
+    }
+    .search-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+
+      .food_card {
+        height: 300px;
+        height: 400px;
+        padding: 1rem;
+        box-shadow: 0 0 3px 3px rgba(235, 235, 235, 0.699);
+        border-radius: 0.7rem;
+
+        .food-tag {
+          font-size: 1.7rem;
+        }
+
+        .food-method {
+          color: $primary-color;
+
+          span {
+            color: #000;
+            font-weight: 300;
+          }
+        }
+
+        .food-desc {
+          color: $semi-gray;
+          font-weight: 300;
+          font-size: 0.9rem;
+        }
+
+        .food-ingredients {
+          margin-top: 0.8rem;
+          .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            justify-content: center;
+            gap: 0.6rem;
+            mask-type: 0.6rem;
+
+            li {
+              background: rgb(238, 238, 238);
+              padding: 0.4rem 0.9rem;
+              width: 100%;
+              text-align: center;
+              font-size: 0.8rem;
+              border-radius: 50px;
+              font-weight: 300;
+            }
+          }
+        }
+        .food-m-container {
+          margin-top: 0.8rem;
+
+          ul {
+            display: grid;
+            list-style-type: decimal;
+            list-style-position: inside;
+
+            li {
+              font-weight: 400;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
