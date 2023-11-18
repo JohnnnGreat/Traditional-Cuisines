@@ -116,10 +116,14 @@ $semi-gray: #7c7c7c;
   &__wrapper {
     max-width: 1200px;
     margin: auto;
-
+    padding: 1rem;
     .search-title {
       line-height: 3;
       font-size: 3rem;
+
+      @media (max-width: 567px) {
+        line-height: 1;
+      }
 
       span {
         color: $primary-color;
@@ -129,15 +133,22 @@ $semi-gray: #7c7c7c;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 3rem;
-
+      @media (max-width: 567px) {
+        grid-template-columns: 1fr;
+      }
       .food_card {
-        height: 300px;
         height: 500px;
         padding: 1rem;
         box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.014);
         border-radius: 0.7rem;
         position: relative;
 
+        @media (max-width: 567px) {
+          width: 100%;
+          height: 450px;
+          padding: 0;
+          margin-top: 1rem;
+        }
         .food-tag {
           font-size: 1.7rem;
           font-weight: 500;
@@ -222,6 +233,10 @@ $semi-gray: #7c7c7c;
             padding: 1rem;
             border-radius: 0.5rem;
             color: #fffbf2;
+
+            @media (max-width: 567px) {
+              width: 100%;
+            }
             &:hover {
               background-color: #d69e2e;
             }
