@@ -7,6 +7,7 @@ $semi-gray: #7c7c7c;
   width: 100%;
   height: 100vh;
   padding: 1rem;
+  overflow: hidden;
 
   &__wrapper {
     max-width: 1200px;
@@ -349,7 +350,7 @@ $semi-gray: #7c7c7c;
 
 .featured {
   padding: 4rem;
-
+  overflow: hidden;
   &__wrapper {
     max-width: 1200px;
     margin: auto;
