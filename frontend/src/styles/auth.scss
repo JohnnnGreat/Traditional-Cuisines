@@ -4,13 +4,17 @@ $p-input: 1rem 0.8rem;
 $semi-gray: #7c7c7c;
 
 .auth {
-  height: 100vh;
-
+  padding: 1rem;
+  @media (max-width: 567px) {
+    height: 200vh;
+  }
   .auth-grid {
     display: grid;
     grid-template-columns: 60% 40%;
-    height: 100%;
 
+    @media (max-width: 567px) {
+      grid-template-columns: 1fr;
+    }
     .second-section {
       background: $primary-color;
       height: 100%;
@@ -61,6 +65,9 @@ $semi-gray: #7c7c7c;
 
       div {
         width: 500px;
+        @media (max-width: 567px) {
+          width: 100%;
+        }
         .auth_main-txt {
           font-size: calc(64px / 16px) + rem;
           color: $auth-text;

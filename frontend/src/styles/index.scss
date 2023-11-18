@@ -20,17 +20,27 @@ $semi-gray: #7c7c7c;
       grid-template-columns: 60% 40%;
       height: 100%;
 
+      @media (max-width: 567px) {
+        grid-template-columns: 1fr;
+      }
+
       .hero-first {
         background-color: #fffbf2;
         height: 100%;
         display: flex;
         align-items: center;
         padding: 3rem;
-
+        @media (max-width: 567px) {
+          padding: 1rem;
+        }
         h1 {
           font-size: calc(64px / 16px) + rem;
           line-height: 1;
           font-weight: 500;
+
+          @media (max-width: 567px) {
+            font-size: calc(50px / 16px) + rem;
+          }
           span {
             color: $primary-color;
           }
@@ -54,7 +64,9 @@ $semi-gray: #7c7c7c;
             outline: none;
             width: 90%;
             display: block;
-
+            @media (max-width: 567px) {
+              width: 100%;
+            }
             &::placeholder {
               color: $semi-gray;
               font-weight: 300 !important;
@@ -83,7 +95,9 @@ $semi-gray: #7c7c7c;
         align-items: center;
         justify-content: center;
         position: relative;
-
+        @media (max-width: 567px) {
+          display: none;
+        }
         .hero-image {
           position: absolute;
           right: 30%;
@@ -150,6 +164,10 @@ $semi-gray: #7c7c7c;
           font-size: 0.9rem;
         }
 
+        .food_image-main {
+          padding: 1rem;
+        }
+
         .food-ingredients {
           margin-top: 0.8rem;
           h1 {
@@ -214,8 +232,11 @@ $semi-gray: #7c7c7c;
 }
 
 .food-main {
-  padding: 3rem;
+  padding: 3rem 0;
 
+  @media (max-width: 567px) {
+    padding: 1rem;
+  }
   &__wrapper {
     max-width: 1200px;
     margin: auto;
