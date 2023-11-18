@@ -3,6 +3,7 @@ import HeroImage from "../../public/heroIMage.png";
 import { foodData } from "../foodData";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -60,6 +61,24 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <section className="featured">
+        <div className="featured__wrapper">
+          <h1 className="featured__header">Our Featured Cuisines</h1>
+          <p>Have a look of the available featured cuisines.</p>
+          <div className="food-grid">
+            <div className="food-card">
+              <h1>Food One</h1>
+            </div>
+            <div className="food-card">
+              <h1>Food One</h1>
+            </div>
+
+            <div className="see_more">
+              <Link href="/cuisines">See More</Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

@@ -155,3 +155,26 @@ $semi-gray: #7c7c7c;
     border-radius: 90%;
   }
 }
+
+//Styling for empty food array
+
+.empty_food {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  overflow: hidden;
+  flex-direction: column;
+
+  h1 {
+    font-size: 4rem;
+    color: rgb(212, 212, 212);
+  }
+
+  p {
+    a {
+      text-decoration: undeline;
+      color: $primary-color;
+    }
+  }
+}

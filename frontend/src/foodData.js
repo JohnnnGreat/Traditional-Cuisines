@@ -11,7 +11,12 @@ export const foodData = [
     image: "https://unsplash.com/s/photos/jollof-rice",
     method:
       "Boil the rice, fry the tomato sauce, mix them together and simmer until done",
-    nutrition: "Calories: 296, Protein: 6.6g, Carbs: 55.8g, Fat: 4.4g",
+    nutrition: [
+      { Name: "Calories", Value: 296 },
+      { Name: "Protein", value: 6.6 },
+      { Name: "Carbs", value: 55.8 },
+      { Name: "Fat", value: 4.4 },
+    ],
     ingredients: [
       "Rice",
       "Tomato paste",

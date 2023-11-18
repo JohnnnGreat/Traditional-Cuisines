@@ -58,7 +58,11 @@ const Header = () => {
               </Link>
             ) : (
               <div className="logout">
-                <img src={userProfilePic} alt="user profile pic" />
+                <Link href={"/profile"}>
+                  {" "}
+                  <img src={userProfilePic} alt="user profile pic" />
+                </Link>
+
                 <button onClick={handleLogout}>Logout</button>
               </div>
             )}
