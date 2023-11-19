@@ -8,7 +8,6 @@ import Link from "next/link";
 const Search = () => {
   const router = useRouter();
 
-  console.log(router);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [isEmpty, setIsEmpty] = useState(true);
@@ -22,6 +21,7 @@ const Search = () => {
     });
 
     setSearchResult(result);
+    console.log(searchResult.length);
     setIsEmpty(result ? false : true);
   }, [router.query.foodName, isEmpty]);
 
@@ -50,7 +50,7 @@ const Search = () => {
         <h1 className="search-title">
           Search Results for <span>{router.query.foodName}</span>
         </h1>
-        {searchResult ? (
+        {searchResult.length > 1 ? (
           <div className="search-container">
             {searchResult.map((item) => (
               <div key={item.id} className="food_card">

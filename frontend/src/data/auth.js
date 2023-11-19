@@ -33,3 +33,32 @@ export const nav = [
     path: "/blog",
   },
 ];
+
+export const featuredDetails = [
+  {
+    name: "Jollof Rice",
+    desc: "A spicy rice dish cooked with tomato sauce and other seasonings",
+    image:
+      "https://zenaskitchen.com/wp-content/uploads/2022/12/jollof-rice.jpg",
+    category: "Rice",
+    cookTime: "45",
+  },
+
+  {
+    name: "Banga Stew",
+    desc: "A yellow sauce made from palm fruit extract and spices",
+    image:
+      "https://allnigerianfoods.com/wp-content/uploads/banga-stew-ofe-akwu.jpg",
+    category: "Stew",
+    cookTime: "90",
+  },
+
+  {
+    name: "Banga Stew",
+    desc: "A yellow sauce made from palm fruit extract and spices",
+    image:
+      "https://allnigerianfoods.com/wp-content/uploads/banga-stew-ofe-akwu.jpg",
+    category: "Stew",
+    cookTime: "90",
+  },
+];
