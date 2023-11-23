@@ -1,5 +1,11 @@
 const express = require("express");
-const { AddCuisine, GetCuisines } = require("../controllers/Cuisines");
+const {
+  AddCuisine,
+  GetCuisines,
+  GetUnapprovedCuisines,
+  VerifyCuisine,
+  GetAllProfileCuisines,
+} = require("../controllers/Cuisines");
 const multer = require("multer");
 const path = require("path");
 
@@ -25,5 +31,8 @@ const router = express.Router();
 // router.get("/getcuisines/:name", GetCuisine);
 router.post("/addcuisines", upload.single("image"), AddCuisine);
 router.get("/getcuisines/:id", GetCuisines);
+router.get("/getunapprovedcuisines", GetUnapprovedCuisines);
+router.put("/verifycuisine/:id", VerifyCuisine);
+router.get("/getallprofilecuisines/:id", GetAllProfileCuisines);
 
 module.exports = router;

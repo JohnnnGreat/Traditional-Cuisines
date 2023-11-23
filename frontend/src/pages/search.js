@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { list } from "postcss";
 import Link from "next/link";
 
+
 const Search = () => {
   const router = useRouter();
 

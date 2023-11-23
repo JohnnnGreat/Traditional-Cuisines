@@ -59,7 +59,6 @@ const Register = async (req, res, next) => {
 };
 
 const GetUser = async (req, res, next) => {
-  console.log(req.body);
   const { id } = req.params;
   try {
     const user = await User.findById(id);

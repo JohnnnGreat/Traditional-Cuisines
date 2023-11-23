@@ -463,3 +463,18 @@ $semi-gray: #7c7c7c;
     }
   }
 }
+
+.add_cuisine_btn {
+  background-color: $primary-color;
+  padding: 0.9rem 1rem;
+  color: #fff;
+  border-radius: 7px;
+  margin-bottom: 1rem;
+}
+
+.display-table {
+  &__wrapper {
+    max-width: 1200px;
+    margin: auto;
+  }
+}

@@ -54,8 +54,53 @@ const AddCuisine = async (req, res) => {
 
 const updateCuisine = (req, res) => {};
 
-const verifiedCuisine = (req, res) => {};
+const VerifyCuisine = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const cuisines = await Cuisines.findByIdAndUpdate(
+      id,
+      { approved: true },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Item Approved Successfuly", success: true });
+  } catch (error) {
+    res.status(401).json({ message: error });
+  }
+};
 
 const deleteCuisines = (req, res) => {};
 
-module.exports = { AddCuisine, GetCuisines };
+const GetUnapprovedCuisines = async (req, res) => {
+  try {
+    const cuisines = await Cuisines.find({ approved: false });
+    res
+      .status(200)
+      .json({ message: "Unapproved Cuisines Fetched Succesfully", cuisines });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+};
+
+const GetAllProfileCuisines = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const cuisines = await Cuisines.find({ user: id });
+    res
+      .status(200)
+      .json({ message: "Retrieved Succesfully", cuisines: cuisines });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  AddCuisine,
+  GetCuisines,
+  GetUnapprovedCuisines,
+  VerifyCuisine,
+  GetAllProfileCuisines,
+};

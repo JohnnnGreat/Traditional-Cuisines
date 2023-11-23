@@ -7,6 +7,7 @@ import AxiosInstance from "../axiosInstance";
 import axios from "axios";
 import { FcEmptyFilter } from "react-icons/fc";
 import { useForm } from "react-hook-form";
+import { Table, Space } from "antd";
 
 const Profile = () => {
   const [token, setToken] = useState("");
@@ -18,11 +19,20 @@ const Profile = () => {
   const [file, setFile] = useState({});
   const [fileName, setFileName] = useState("");
   const [imagePath, setImagePath] = useState("");
-  const [userAddedCuisines, setUserAddedCuisines] = useState({});
+  const [userAddedCuisines, setUserAddedCuisines] = useState([]);
+  const [userCuisines, setUserCuisines] = useState([]);
 
-  const data = JSON.parse(localStorage.getItem("data"));
-  const { _id } = data;
+  // const data =
+  //   JSON.parse(localStorage.getItem("data")) &&
+  //   JSON.parse(localStorage.getItem("data"));
+  // const { _id } = data;
+
   useEffect(() => {
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id } = data;
     (async function () {
       try {
         const response = await axios.get(
@@ -31,7 +41,8 @@ const Profile = () => {
 
         const { data } = response;
         const { cuisines } = data;
-        
+
+        setUserAddedCuisines(cuisines);
       } catch (error) {
         console.log(error);
       }
@@ -116,7 +127,7 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [token]);
+  });
 
   const closeMo = () => {
     setShowForm(false);
@@ -134,6 +145,88 @@ const Profile = () => {
   useEffect(() => {
     if (token) setIsValidated(true);
   });
+
+  useEffect(() => {
+    (async function () {
+      try {
+        if (localStorage.getItem("data")) {
+          const dataContent = JSON.parse(localStorage.getItem("data"));
+          const { _id } = dataContent;
+
+          const response = await AxiosInstance.get(
+            `/cuisines/getallprofilecuisines/${_id}`
+          );
+
+          const { data } = response;
+          const { cuisines } = data;
+          setUserCuisines(cuisines);
+        }
+      } catch (error) {}
+    })();
+  });
+
+  const columns = [
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   //   render: (text) => <a>{text}</a>,
+    // },
+    {
+      title: "Name",
+      dataIndex: "name",
+      //   render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+    },
+    // {
+    //   title: "Method",
+    //   dataIndex: "method",
+    // },
+
+    {
+      title: "Ingredients",
+      dataIndex: "ingredients",
+    },
+
+    {
+      title: "Category",
+      dataIndex: "category",
+    },
+
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <button
+            className="approve-food"
+            onClick={() => {
+              handleApprove(record);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            className="view-food"
+            // onClick={() => {
+            //   handleApprove(record);
+            // }}
+          >
+            Edit
+          </button>
+        </Space>
+      ),
+    },
+  ];
+
+  const data = [];
+
+  const content = userCuisines?.map((item) => {
+    data.push(item);
+  });
+
   return (
     <>
       {isValidated ? (
@@ -163,21 +256,37 @@ const Profile = () => {
             </div>
           </section>
 
-          <div className="cuisines__added">
-            <div className="cuisines__added__wrapper">
-              <div>
-                <FcEmptyFilter size={"50px"} />
-                <h1>You Have No Cuisine Added</h1>
+          {userAddedCuisines.length <= 0 ? (
+            <div className="cuisines__added">
+              <div className="cuisines__added__wrapper">
+                <div>
+                  <FcEmptyFilter size={"50px"} />
+                  <h1>You Have No Cuisine Added</h1>
+                  <button
+                    onClick={() => {
+                      setShowForm(true);
+                    }}
+                  >
+                    Add A cuisine
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="display_table">
+              <div className="display-table__wrapper">
                 <button
+                  className="add_cuisine_btn"
                   onClick={() => {
                     setShowForm(true);
                   }}
                 >
-                  Add a new Cuisine
+                  Add a cuisine
                 </button>
+                <Table columns={columns} dataSource={data} />
               </div>
             </div>
-          </div>
+          )}
         </>
       ) : (
         <div className="required-login">

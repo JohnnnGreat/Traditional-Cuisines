@@ -44,7 +44,7 @@ const cuisinesSchema = mongoose.Schema(
 
     approved: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     user: {
