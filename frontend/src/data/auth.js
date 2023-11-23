@@ -54,11 +54,11 @@ export const featuredDetails = [
   },
 
   {
-    name: "Banga Stew",
-    desc: "A yellow sauce made from palm fruit extract and spices",
+    name: "Okra SouP",
+    desc: "A slimy soup made from okra and vegetables ",
     image:
-      "https://allnigerianfoods.com/wp-content/uploads/banga-stew-ofe-akwu.jpg",
-    category: "Stew",
-    cookTime: "90",
+      "https://cheflolaskitchen.com/wp-content/uploads/2018/06/Egusi-soup-Recipe-2-480x270.jpg",
+    category: "Soup",
+    cookTime: "45",
   },
 ];

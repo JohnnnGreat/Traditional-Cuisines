@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import AxiosInstance from "../axiosInstance";
+import axios from "axios";
 import { FcEmptyFilter } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 
@@ -14,6 +15,83 @@ const Profile = () => {
 
   const [showForm, setShowForm] = useState(false);
 
+  const [file, setFile] = useState({});
+  const [fileName, setFileName] = useState("");
+  const [imagePath, setImagePath] = useState("");
+  const [userAddedCuisines, setUserAddedCuisines] = useState({});
+
+  const data = JSON.parse(localStorage.getItem("data"));
+  const { _id } = data;
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/cuisines/getcuisines/${_id}`
+        );
+
+        const { data } = response;
+        const { cuisines } = data;
+        
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, invalid },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      method: "",
+      ingredients: "",
+      time: "",
+      category: "",
+    },
+    mode: "onChange",
+  });
+
+  const handleFile = (e) => {
+    setFile(e.target.files[0]);
+
+    setFileName(e.target.files[0].name);
+  };
+
+  const submitHandler = async (values) => {
+    setShowForm(false);
+    console.log(values);
+    const data = JSON.parse(localStorage.getItem("data"));
+    const { _id } = data;
+    const formData = new FormData();
+    formData.append("name", "john");
+    formData.append("description", values.description);
+    formData.append("method", values.method);
+    formData.append("ingredients", values.ingredients);
+    formData.append("time", values.time);
+    formData.append("category", values.category);
+    formData.append("image", file);
+    formData.append("user", _id);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/cuisines/addcuisines",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const { data } = response;
+      const { file } = data;
+      setImagePath(file);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //Fetch User Data
   useEffect(() => {
     try {
@@ -38,8 +116,11 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
-  });
+  }, [token]);
 
+  const closeMo = () => {
+    setShowForm(false);
+  };
   //Check if the token is stored in the localstoreage
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -107,145 +188,117 @@ const Profile = () => {
           </div>
         </div>
       )}
+      <img className="image-form" src={imagePath} alt="" />
 
-      {showForm && <Form />}
+      {showForm && (
+        <div className="form-container">
+          <form onSubmit={handleSubmit(submitHandler)}>
+            <div>
+              <label htmlFor="name">Food Name</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="e.g Rice, Beans"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: " Enter a valid Name",
+                  },
+                })}
+              />
+            </div>
+            <div>
+              <label htmlFor="description">Description</label>
+              <input
+                type="text"
+                id="description"
+                {...register("description", {
+                  required: {
+                    value: true,
+                    message: " Enter a valid Name",
+                  },
+                })}
+                placeholder="add a description"
+              />
+            </div>
+            <div>
+              <label htmlFor="method">Method</label>
+              <input
+                id="method"
+                type="text"
+                {...register("method", {
+                  required: {
+                    value: true,
+                    message: " Enter a valid Name",
+                  },
+                })}
+                placeholder="Parboil the rice, fry the vegetables and meat........"
+              />
+            </div>
+            <div>
+              <label htmlFor="method">Ingredients</label>
+              <input
+                id="method"
+                type="text"
+                {...register("ingredients", {
+                  required: {
+                    value: true,
+                    message: " Enter a valid Name",
+                  },
+                })}
+                placeholder="e.g. Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g"
+              />
+            </div>
+            <div>
+              <label className="add-image" htmlFor="fileUpload">
+                Upload Image
+              </label>
+              <input
+                id="fileUpload"
+                type="file"
+                onChange={handleFile}
+                accept="image/*"
+                style={{ display: "none" }}
+                placeholder="45"
+              />
+              {fileName && <p className="file_name">{fileName}</p>}
+            </div>
+            <div className="time-cat">
+              <div>
+                <label htmlFor="method">Category</label>
+                <input
+                  id="method"
+                  {...register("category", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                  type="text"
+                  placeholder="Rice"
+                />
+              </div>
+              <div>
+                <label htmlFor="method">Time</label>
+                <input
+                  id="method"
+                  {...register("time", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                  type="text"
+                  placeholder="45"
+                />
+              </div>
+            </div>
+            <button>Submit</button>
+          </form>
+        </div>
+      )}
     </>
   );
 };
 
-const Form = () => {
-  const [file, setFile] = useState({});
-  const [fileName, setFileName] = useState("");
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, invalid },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      description: "",
-      method: "",
-      ingredients: "",
-      time: "",
-      category: "",
-    },
-    mode: "onChange",
-  });
-
-  const handleFile = (e) => {
-    setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
-  };
-
-  const submitHandler = (values) => {
-    console.log(values);
-    console.log(file);
-  };
-  return (
-    <div className="form-container">
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <div>
-          <label htmlFor="name">Food Name</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="e.g Rice, Beans"
-            {...register("name", {
-              required: {
-                value: true,
-                message: " Enter a valid Name",
-              },
-            })}
-          />
-        </div>
-        <div>
-          <label htmlFor="description">Description</label>
-          <input
-            type="text"
-            id="description"
-            {...register("description", {
-              required: {
-                value: true,
-                message: " Enter a valid Name",
-              },
-            })}
-            placeholder="add a description"
-          />
-        </div>
-        <div>
-          <label htmlFor="method">Method</label>
-          <input
-            id="method"
-            type="text"
-            {...register("method", {
-              required: {
-                value: true,
-                message: " Enter a valid Name",
-              },
-            })}
-            placeholder="Parboil the rice, fry the vegetables and meat........"
-          />
-        </div>
-        <div>
-          <label htmlFor="method">Ingredients</label>
-          <input
-            id="method"
-            type="text"
-            {...register("ingredients", {
-              required: {
-                value: true,
-                message: " Enter a valid Name",
-              },
-            })}
-            placeholder="e.g. Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g"
-          />
-        </div>
-        <div>
-          <label className="add-image" htmlFor="fileUpload">
-            Upload Image
-          </label>
-          <input
-            id="fileUpload"
-            type="file"
-            onChange={handleFile}
-            style={{ display: "none" }}
-            placeholder="45"
-          />
-          {fileName && <p className="file_name">{fileName}</p>}
-        </div>
-        <div className="time-cat">
-          <div>
-            <label htmlFor="method">Category</label>
-            <input
-              id="method"
-              {...register("category", {
-                required: {
-                  value: true,
-                  message: " Enter a valid Name",
-                },
-              })}
-              type="text"
-              placeholder="Rice"
-            />
-          </div>
-          <div>
-            <label htmlFor="method">Time</label>
-            <input
-              id="method"
-              {...register("time", {
-                required: {
-                  value: true,
-                  message: " Enter a valid Name",
-                },
-              })}
-              type="text"
-              placeholder="45"
-            />
-          </div>
-        </div>
-        <button>Submit</button>
-      </form>
-    </div>
-  );
-};
 export default Profile;

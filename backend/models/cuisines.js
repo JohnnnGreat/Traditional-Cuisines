@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cuisinesScheme = mongoose.Schema(
+const cuisinesSchema = mongoose.Schema(
   {
     name: {
       required: true,
@@ -29,7 +29,7 @@ const cuisinesScheme = mongoose.Schema(
 
     nutrition: {
       type: String,
-      required: true,
+      // required: true,
     },
 
     category: {
@@ -57,5 +57,5 @@ const cuisinesScheme = mongoose.Schema(
   }
 );
 
-const Cuisines = mongoose.model("Cuisines", cuisinesScheme);
+const Cuisines = mongoose.model("Cuisines", cuisinesSchema);
 module.exports = Cuisines;
