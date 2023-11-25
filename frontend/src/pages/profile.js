@@ -36,8 +36,8 @@ const Profile = () => {
     const { _id } = data;
     (async function () {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/cuisines/getcuisines/${_id}`
+        const response = await AxiosInstance.get(
+          `/cuisines/getcuisines/${_id}`
         );
 
         const { data } = response;
@@ -97,8 +97,8 @@ const Profile = () => {
     formData.append("user", _id);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/cuisines/addcuisines",
+      const response = await AxiosInstance.post(
+        "/cuisines/addcuisines",
         formData,
         {
           headers: {
