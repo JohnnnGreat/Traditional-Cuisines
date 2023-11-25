@@ -10,9 +10,13 @@ cloudinary.config({
 
 const upload = multer({ dest: "uploads/" });
 
-const GetCuisine = (req, res) => {
+const GetCuisine = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+
+  try {
+    const cuisine = await Cuisine.find({ id });
+    res.status(200).json({ message: "Cuisine Fetched Succesfully", cuisine });
+  } catch (error) {}
 };
 
 const GetCuisines = async (req, res) => {
@@ -25,7 +29,11 @@ const GetCuisines = async (req, res) => {
   }
 };
 
-const getCuisinesCat = (req, res) => {};
+const getCuisinesCat = (req, res) => {
+  try {
+    const cuisinesCategory = Cuisines.find;
+  } catch (error) {}
+};
 
 const AddCuisine = async (req, res) => {
   try {
@@ -71,11 +79,25 @@ const VerifyCuisine = async (req, res) => {
   }
 };
 
+const GetApprovedCuisines = async (req, res) => {
+  try {
+    const cuisines = await Cuisines.find({ approved: true });
+    console.log(cuisines);
+    res
+      .status(200)
+      .json({ cuisines: cuisines, messgae: "Fetched Succesfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ message: error });
+  }
+};
+
 const deleteCuisines = (req, res) => {};
 
 const GetUnapprovedCuisines = async (req, res) => {
   try {
     const cuisines = await Cuisines.find({ approved: false });
+
     res
       .status(200)
       .json({ message: "Unapproved Cuisines Fetched Succesfully", cuisines });
@@ -103,4 +125,6 @@ module.exports = {
   GetUnapprovedCuisines,
   VerifyCuisine,
   GetAllProfileCuisines,
+  GetCuisine,
+  GetApprovedCuisines,
 };

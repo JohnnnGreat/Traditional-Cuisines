@@ -8,12 +8,13 @@ import axios from "axios";
 import { FcEmptyFilter } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { Table, Space } from "antd";
+import Preloader from "@/components/Preloader";
 
 const Profile = () => {
   const [token, setToken] = useState("");
   const [isValidated, setIsValidated] = useState(false);
   const [user, setUser] = useState({});
-
+  const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
   const [file, setFile] = useState({});
@@ -47,7 +48,7 @@ const Profile = () => {
         console.log(error);
       }
     })();
-  });
+  }, []);
   const {
     handleSubmit,
     register,
@@ -64,19 +65,29 @@ const Profile = () => {
     mode: "onChange",
   });
 
+  const [imageUrl, setImageUrl] = useState(null);
   const handleFile = (e) => {
     setFile(e.target.files[0]);
 
     setFileName(e.target.files[0].name);
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const objectURL = event.target.result;
+      setImageUrl(objectURL);
+      console.log(imageUrl);
+    };
   };
 
   const submitHandler = async (values) => {
+    setIsLoading(true);
     setShowForm(false);
     console.log(values);
     const data = JSON.parse(localStorage.getItem("data"));
     const { _id } = data;
     const formData = new FormData();
-    formData.append("name", "john");
+    formData.append("name", values.name);
     formData.append("description", values.description);
     formData.append("method", values.method);
     formData.append("ingredients", values.ingredients);
@@ -95,11 +106,13 @@ const Profile = () => {
           },
         }
       );
+      setIsLoading(false);
       const { data } = response;
       const { file } = data;
       setImagePath(file);
       console.log(data);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -180,10 +193,10 @@ const Profile = () => {
       title: "Description",
       dataIndex: "description",
     },
-    // {
-    //   title: "Method",
-    //   dataIndex: "method",
-    // },
+    {
+      title: "Method",
+      dataIndex: "method",
+    },
 
     {
       title: "Ingredients",
@@ -193,6 +206,11 @@ const Profile = () => {
     {
       title: "Category",
       dataIndex: "category",
+    },
+
+    {
+      title: "Time",
+      dataIndex: "time",
     },
 
     {
@@ -229,6 +247,7 @@ const Profile = () => {
 
   return (
     <>
+      {isLoading && <Preloader />}
       {isValidated ? (
         <>
           <section className="profile_details">
@@ -302,35 +321,38 @@ const Profile = () => {
       {showForm && (
         <div className="form-container">
           <form onSubmit={handleSubmit(submitHandler)}>
-            <div>
-              <label htmlFor="name">Food Name</label>
-              <input
-                id="name"
-                type="text"
-                placeholder="e.g Rice, Beans"
-                {...register("name", {
-                  required: {
-                    value: true,
-                    message: " Enter a valid Name",
-                  },
-                })}
-              />
+            <div className="time-cat">
+              <div className="form-content">
+                <label htmlFor="name">Food Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="e.g Rice, Beans"
+                  {...register("name", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                />
+              </div>
+              <div className="form-content">
+                <label htmlFor="description">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  {...register("description", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                  placeholder="add a description"
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="description">Description</label>
-              <input
-                type="text"
-                id="description"
-                {...register("description", {
-                  required: {
-                    value: true,
-                    message: " Enter a valid Name",
-                  },
-                })}
-                placeholder="add a description"
-              />
-            </div>
-            <div>
+
+            <div className="form-content">
               <label htmlFor="method">Method</label>
               <input
                 id="method"
@@ -344,21 +366,40 @@ const Profile = () => {
                 placeholder="Parboil the rice, fry the vegetables and meat........"
               />
             </div>
-            <div>
-              <label htmlFor="method">Ingredients</label>
-              <input
-                id="method"
-                type="text"
-                {...register("ingredients", {
-                  required: {
-                    value: true,
-                    message: " Enter a valid Name",
-                  },
-                })}
-                placeholder="e.g. Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g"
-              />
+
+            <div className="time-cat">
+              {" "}
+              <div className="form-content">
+                <label htmlFor="method">Nutrition</label>
+                <input
+                  id="method"
+                  type="text"
+                  {...register("nutrition", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                  placeholder="e.g. Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g"
+                />
+              </div>{" "}
+              <div className="form-content">
+                <label htmlFor="ingredient">Ingredients</label>
+                <input
+                  id="ingredient"
+                  type="text"
+                  {...register("ingredients", {
+                    required: {
+                      value: true,
+                      message: " Enter a valid Name",
+                    },
+                  })}
+                  placeholder="e.g. Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g"
+                />
+              </div>
             </div>
-            <div>
+
+            <div className="form-content">
               <label className="add-image" htmlFor="fileUpload">
                 Upload Image
               </label>
@@ -371,9 +412,10 @@ const Profile = () => {
                 placeholder="45"
               />
               {fileName && <p className="file_name">{fileName}</p>}
+              {/* <img src={URL.createObjectURL(file)} /> */}
             </div>
             <div className="time-cat">
-              <div>
+              <div className="form-content">
                 <label htmlFor="method">Category</label>
                 <input
                   id="method"
@@ -387,7 +429,7 @@ const Profile = () => {
                   placeholder="Rice"
                 />
               </div>
-              <div>
+              <div className="form-content">
                 <label htmlFor="method">Time</label>
                 <input
                   id="method"

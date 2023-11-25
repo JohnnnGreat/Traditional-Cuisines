@@ -195,6 +195,7 @@ $semi-gray: #7c7c7c;
     background-color: #fff;
     width: 700px;
     padding: 2rem;
+
     button {
       margin-top: 0.7rem;
       text-align: center;
@@ -205,6 +206,7 @@ $semi-gray: #7c7c7c;
       border-radius: 5px;
     }
     .time-cat {
+      display: flex;
       flex-direction: row;
       gap: 1rem;
       margin-top: 0;
@@ -240,7 +242,7 @@ $semi-gray: #7c7c7c;
         border: 1px solid $primary-color;
       }
     }
-    div {
+    .form-content {
       display: flex;
       flex-direction: column;
       margin-top: 0.8rem;
@@ -259,6 +261,12 @@ $semi-gray: #7c7c7c;
           font-size: 0.8rem;
         }
       }
+    }
+
+    .form-grid {
+      display: flex !important;
+      grid-template-columns: repeat(3, 1fr);
+      background: red;
     }
   }
 }

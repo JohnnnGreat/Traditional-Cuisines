@@ -7,6 +7,9 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { Table, Space } from "antd";
 import { foodData } from "@/foodData";
 import { message } from "antd";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
+// import  html2pdf  from "html2pdf.js";
 
 const Index = () => {
   const [cuisines, setCuisines] = useState([]);
@@ -48,6 +51,15 @@ const Index = () => {
     }
   };
 
+  // const exportPdf = () => {
+  //   const input = document.getElementById("table-display"); // replace with your HTML element ID
+  //   // html2canvas(input).then((canvas) => {
+  //   //   const pdf = new jsPDF("p", "mm", "a4");
+  //   //   pdf.addImage(canvas.toDataURL("image/png")); // adjust size as needed
+  //   //   pdf.save("your-file-name.pdf");
+  //   // });
+  //   html2pdf(input);
+  // };
   const columns = [
     // {
     //   title: "ID",
@@ -128,7 +140,7 @@ const Index = () => {
     // },
   ];
 
-  const content = cuisines?.map((item) => {
+  cuisines?.map((item) => {
     data.push(item);
   });
 
@@ -146,8 +158,8 @@ const Index = () => {
               {/* <div className="notification-dot"></div> */}
             </div>
           </div>
-
-          <div className="table-display">
+          {/* <button onClick={exportPdf}>Export Pdf</button> */}
+          <div className="table-display" id="table-display">
             <Table dataSource={data} columns={columns} />
           </div>
         </div>
