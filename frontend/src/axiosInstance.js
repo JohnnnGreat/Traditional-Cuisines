@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://soulfood.onrender.com/" });
+const API = axios.create({ baseURL: "https://soulfood-sepia.vercel.app/" });
 // API.interceptors.request.use((req) => {
 //   if (localStorage.getItem("profile")) {
 //     console.log(localStorage.getItem("token"));

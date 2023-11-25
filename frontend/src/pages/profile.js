@@ -293,15 +293,15 @@ const Profile = () => {
             </div>
           ) : (
             <div className="display_table">
+              <button
+                className="add_cuisine_btn"
+                onClick={() => {
+                  setShowForm(true);
+                }}
+              >
+                Add a cuisine
+              </button>
               <div className="display-table__wrapper">
-                <button
-                  className="add_cuisine_btn"
-                  onClick={() => {
-                    setShowForm(true);
-                  }}
-                >
-                  Add a cuisine
-                </button>
                 <Table columns={columns} dataSource={data} />
               </div>
             </div>
