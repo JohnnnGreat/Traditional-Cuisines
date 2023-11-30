@@ -53,7 +53,6 @@ const Register = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -70,6 +69,13 @@ const GetUser = async (req, res, next) => {
     console.log(error);
     next(error);
   }
+};
+
+const GetAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    console.log(users);
+  } catch (error) {}
 };
 module.exports = {
   Login,

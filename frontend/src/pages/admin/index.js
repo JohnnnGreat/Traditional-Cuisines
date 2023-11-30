@@ -10,9 +10,12 @@ import { message } from "antd";
 // import jsPDF from "jspdf";
 // import html2canvas from "html2canvas";
 // import  html2pdf  from "html2pdf.js";
+import Preloader from "@/components/Preloader";
 
 const Index = () => {
   const [cuisines, setCuisines] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
+
   useEffect(() => {
     const { _id } = JSON.parse(localStorage.getItem("data"));
 
@@ -34,13 +37,15 @@ const Index = () => {
   });
 
   const handleApprove = async (record) => {
+    setShowLoader(true);
     const { _id } = record;
     try {
       const response = await AxiosInstance.put(
         `/cuisines/verifycuisine/${_id}`
       );
+      setShowLoader(false);
       const { data } = response;
-      const { success, message } = date;
+      const { success, message } = data;
       if (success) {
         message.sucess(message);
       } else {
@@ -48,6 +53,7 @@ const Index = () => {
       }
     } catch (error) {
       message.error(message);
+      setShowLoader(false);
     }
   };
 
@@ -60,6 +66,8 @@ const Index = () => {
   //   // });
   //   html2pdf(input);
   // };
+
+  const viewFood = () => {};
   const columns = [
     // {
     //   title: "ID",
@@ -75,15 +83,6 @@ const Index = () => {
       title: "Description",
       dataIndex: "description",
     },
-    // {
-    //   title: "Method",
-    //   dataIndex: "method",
-    // },
-
-    // {
-    //   title: "Ingredients",
-    //   dataIndex: "ingredients",
-    // },
 
     {
       title: "Category",
@@ -105,9 +104,9 @@ const Index = () => {
           </button>
           <button
             className="view-food"
-            // onClick={() => {
-            //   handleApprove(record);
-            // }}
+            onClick={() => {
+              viewFood(record);
+            }}
           >
             View
           </button>
@@ -116,55 +115,39 @@ const Index = () => {
     },
   ];
 
-  const data = [
-    // {
-    //   key: "1",
-    //   name: "John Brown",
-    //   age: 32,
-    //   address: "New York No. 1 Lake Park",
-    //   tags: ["nice", "developer"],
-    // },
-    // {
-    //   key: "2",
-    //   name: "Jim Green",
-    //   age: 42,
-    //   address: "London No. 1 Lake Park",
-    //   tags: ["loser"],
-    // },
-    // {
-    //   key: "3",
-    //   name: "Joe Black",
-    //   age: 32,
-    //   address: "Sydney No. 1 Lake Park",
-    //   tags: ["cool", "teacher"],
-    // },
-  ];
+  const data = [];
 
   cuisines?.map((item) => {
     data.push(item);
   });
 
   return (
-    <div className="admin">
-      <Layout>
-        <div className="admin-wrapper">
-          <h1 className="food-request">Food Requests</h1>
-          <Divider />
+    <>
+      <div>You are yet to verify your account</div>
+      {showLoader && <Preloader />}
+      <div className="admin">
+        <Layout>
+          <div className="admin-wrapper">
+            <h1 className="food-request">Food Requests</h1>
+            <Divider />
 
-          <div className="notification-container">
-            <div className="notification-card">
-              <IoIosNotificationsOutline fontSize={25} />
-              {cuisines.length > 0 && <div className="notification-dot"></div>}
-              {/* <div className="notification-dot"></div> */}
+            <div className="notification-container">
+              <div className="notification-card">
+                <IoIosNotificationsOutline fontSize={25} />
+                {cuisines.length > 0 && (
+                  <div className="notification-dot"></div>
+                )}
+                {/* <div className="notification-dot"></div> */}
+              </div>
+            </div>
+            {/* <button onClick={exportPdf}>Export Pdf</button> */}
+            <div className="table-display" id="table-display">
+              <Table dataSource={data} columns={columns} />
             </div>
           </div>
-          {/* <button onClick={exportPdf}>Export Pdf</button> */}
-          <div className="table-display" id="table-display">
-            <Table dataSource={data} columns={columns} />
-          </div>
-        </div>
-      </Layout>
-    </div>
+        </Layout>
+      </div>
+    </>
   );
 };
 

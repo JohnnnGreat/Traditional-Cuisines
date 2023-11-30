@@ -5,19 +5,43 @@ import { featuredDetails } from "@/data/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AxiosInstance from "@/axiosInstance";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const router = useRouter();
-  useEffect(() => {
-    console.log(foodData);
-  });
-  console.log(featuredDetails);
+  useEffect(() => {});
+
   const [searchInput, setSearchInput] = useState("");
 
   const handleSearchInput = (e) => {
     setSearchInput(e.target.value);
   };
 
+  const [email, setEmail] = useState("");
+
+  function handleEmailValue(e) {
+    setEmail(e.target.value);
+  }
+
+  async function handleSubscription(e) {
+    e.preventDefault();
+    console.log(email);
+    try {
+      const response = await AxiosInstance.post("/newsletter", { email });
+      console.log(response);
+      const { data } = response;
+      const { message, success } = data;
+      if (success) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  }
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -29,6 +53,7 @@ export default function Home() {
   };
   return (
     <>
+      <Toaster />
       <main className="hero">
         <div className="hero__wrapper">
           <div className="hero__wrapper__grid">
@@ -87,6 +112,26 @@ export default function Home() {
       </section>
       <section className="get-started">
         <div className="get-started__wrapper"></div>{" "}
+      </section>
+      <section className="newsletter">
+        <div className="newsletter__wrapper">
+          <div>
+            <h1>Subscribe to out newsletter</h1>
+            <p>
+              By Subscribing to, you agree to receive important updates about
+              new cuisines recipes
+            </p>
+            <form action="">
+              <input
+                type="text"
+                onChange={handleEmailValue}
+                value={email}
+                placeholder="Email Address"
+              />
+              <button onClick={handleSubscription}>Subscribe</button>
+            </form>
+          </div>
+        </div>
       </section>
     </>
   );

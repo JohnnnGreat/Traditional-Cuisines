@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Divider from "@/components/Divider";
 import Image from "next/image";
 import { useState } from "react";
@@ -6,9 +6,11 @@ import Link from "next/link";
 import AxiosInstance from "../axiosInstance";
 import axios from "axios";
 import { FcEmptyFilter } from "react-icons/fc";
+import { IoClose } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { Table, Space } from "antd";
 import Preloader from "@/components/Preloader";
+import toast, { Toaster } from "react-hot-toast";
 
 const Profile = () => {
   const [token, setToken] = useState("");
@@ -22,6 +24,8 @@ const Profile = () => {
   const [imagePath, setImagePath] = useState("");
   const [userAddedCuisines, setUserAddedCuisines] = useState([]);
   const [userCuisines, setUserCuisines] = useState([]);
+  const [id, setPostId] = useState("");
+  const form = useRef(null);
 
   // const data =
   //   JSON.parse(localStorage.getItem("data")) &&
@@ -48,23 +52,49 @@ const Profile = () => {
         console.log(error);
       }
     })();
-  }, []);
+  });
+  const [isEdit, setIsEdit] = useState(false);
+  const [record, setRecord] = useState(null);
   const {
     handleSubmit,
     register,
     formState: { errors, invalid },
+    setValue,
+    getValues,
+    reset,
   } = useForm({
-    defaultValues: {
-      name: "",
-      description: "",
-      method: "",
-      ingredients: "",
-      time: "",
-      category: "",
-    },
+    defaultValues: isEdit
+      ? record
+      : {
+          name: "",
+          description: "",
+          method: "",
+          ingredients: "",
+          time: "",
+          category: "",
+        },
     mode: "onChange",
   });
 
+  const handleEdit = (record) => {
+    setPostId(record._id);
+
+    setValue("name", record.name);
+    setValue("description", record.description);
+    setValue("method", record.method);
+    setValue("ingredients", record.ingredients);
+    setValue("category", record.category);
+    setValue("time", record.time);
+    setValue("image", record.imageUrl);
+
+    setIsEdit(true);
+
+    const formValues = getValues();
+    console.log(formValues);
+
+    setRecord(record);
+    setShowForm(true);
+  };
   const [imageUrl, setImageUrl] = useState(null);
   const handleFile = (e) => {
     setFile(e.target.files[0]);
@@ -80,10 +110,24 @@ const Profile = () => {
     };
   };
 
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id } = data;
+    const addedCuisines = async () => {
+      try {
+        const response = await AxiosInstance.get(`/getcuisinesno/${_id}`);
+      } catch (error) {}
+    };
+
+    addedCuisines();
+  });
+
   const submitHandler = async (values) => {
     setIsLoading(true);
     setShowForm(false);
-    console.log(values);
     const data = JSON.parse(localStorage.getItem("data"));
     const { _id } = data;
     const formData = new FormData();
@@ -228,9 +272,9 @@ const Profile = () => {
           </button>
           <button
             className="view-food"
-            // onClick={() => {
-            //   handleApprove(record);
-            // }}
+            onClick={() => {
+              handleEdit(record);
+            }}
           >
             Edit
           </button>
@@ -241,13 +285,36 @@ const Profile = () => {
 
   const data = [];
 
-  const content = userCuisines?.map((item) => {
+  userCuisines?.map((item) => {
     data.push(item);
   });
 
+  async function editHandler(record) {
+    setIsLoading(true);
+    setShowForm(false);
+    try {
+      const form = getValues();
+
+      const response = await AxiosInstance.put(`/cuisines/update/${id}`, form);
+      const { data } = response;
+      console.log(data);
+      const { success, message } = data;
+
+      if (success) {
+        setIsLoading(false);
+        toast.success(message);
+        reset();
+      }
+    } catch (error) {
+      setIsLoading(false);
+      toast.message(error.messag);
+      reset();
+    }
+  }
   return (
     <>
       {isLoading && <Preloader />}
+      <Toaster />
       {isValidated ? (
         <>
           <section className="profile_details">
@@ -293,15 +360,15 @@ const Profile = () => {
             </div>
           ) : (
             <div className="display_table">
-              <button
-                className="add_cuisine_btn"
-                onClick={() => {
-                  setShowForm(true);
-                }}
-              >
-                Add a cuisine
-              </button>
               <div className="display-table__wrapper">
+                <button
+                  className="add_cuisine_btn"
+                  onClick={() => {
+                    setShowForm(true);
+                  }}
+                >
+                  Add a cuisine
+                </button>
                 <Table columns={columns} dataSource={data} />
               </div>
             </div>
@@ -316,11 +383,22 @@ const Profile = () => {
           </div>
         </div>
       )}
-      <img className="image-form" src={imagePath} alt="" />
 
       {showForm && (
         <div className="form-container">
-          <form onSubmit={handleSubmit(submitHandler)}>
+          <div
+            className="closebtn"
+            onClick={() => {
+              setShowForm(false);
+            }}
+          >
+            <IoClose size={"40px"} color="fff" />
+          </div>
+
+          <form
+            ref={form}
+            onSubmit={handleSubmit(isEdit ? editHandler : submitHandler)}
+          >
             <div className="time-cat">
               <div className="form-content">
                 <label htmlFor="name">Food Name</label>
@@ -444,6 +522,7 @@ const Profile = () => {
                 />
               </div>
             </div>
+
             <button>Submit</button>
           </form>
         </div>
@@ -451,5 +530,4 @@ const Profile = () => {
     </>
   );
 };
-
 export default Profile;

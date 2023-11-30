@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const { connectToDb } = require("./config");
 const userRoutes = require("./routes/userRoutes");
 const cuisinesRoutes = require("./routes/cuisineRoutes");
+const newsletterRoutes = require("./routes/newsletterRoutes");
 const { error } = require("./middlewares/errorHandler");
 const multer = require("multer");
 //Initialize Application
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use("/users", userRoutes);
 app.use("/cuisines", cuisinesRoutes);
+app.use("/newsletter", newsletterRoutes);
 
 app.use(error);
 

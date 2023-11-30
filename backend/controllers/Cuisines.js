@@ -60,7 +60,20 @@ const AddCuisine = async (req, res) => {
   }
 };
 
-const updateCuisine = (req, res) => {};
+const UpdateCuisine = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(req.body);
+
+  try {
+    const cuisine = await Cuisines.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    res.status(200).json({ success: true, message: "Updated Succesfully" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const VerifyCuisine = async (req, res) => {
   const { id } = req.params;
@@ -127,4 +140,5 @@ module.exports = {
   GetAllProfileCuisines,
   GetCuisine,
   GetApprovedCuisines,
+  UpdateCuisine,
 };

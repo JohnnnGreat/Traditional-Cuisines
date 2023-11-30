@@ -282,3 +282,10 @@ $semi-gray: #7c7c7c;
 .image-form {
   height: 400px;
 }
+
+.closebtn {
+  position: absolute !important;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
