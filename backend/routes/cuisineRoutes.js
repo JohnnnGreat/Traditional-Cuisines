@@ -7,6 +7,9 @@ const {
   GetAllProfileCuisines,
   GetApprovedCuisines,
   UpdateCuisine,
+  GetCuisinesNo,
+  DeleteCuisines,
+  GetAddedCuisines,
 } = require("../controllers/Cuisines");
 const multer = require("multer");
 const path = require("path");
@@ -38,5 +41,8 @@ router.put("/verifycuisine/:id", VerifyCuisine);
 router.get("/getallprofilecuisines/:id", GetAllProfileCuisines);
 router.get("/approvedcuisines", GetApprovedCuisines);
 router.put("/update/:id", UpdateCuisine);
+router.get("/getcuisinesno/:id", GetCuisinesNo);
+router.delete("/delete/:id", DeleteCuisines);
+router.get("/getaddedcuisines/:id", GetAddedCuisines);
 
 module.exports = router;

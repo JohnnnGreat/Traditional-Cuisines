@@ -24,9 +24,22 @@ $semi-gray: #7c7c7c;
         align-items: center;
         justify-content: center;
 
+        position: relative;
         .profile__image {
-          width: 300px;
+          width: 250px;
+          height: 250px;
           border-radius: 100%;
+          object-fit: cover;
+        }
+
+        .chooseimage {
+          position: absolute;
+          border: 2px solid #fff;
+          padding: 1rem 2rem;
+          color: #fff;
+          cursor: pointer;
+          background: #00000098;
+          border-radius: 10px;
         }
       }
 
@@ -42,6 +55,8 @@ $semi-gray: #7c7c7c;
 
         .instance-details {
           color: $primary-color;
+          display: flex;
+          gap: 0.3rem;
         }
       }
     }

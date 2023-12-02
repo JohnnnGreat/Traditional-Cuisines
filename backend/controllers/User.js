@@ -1,6 +1,13 @@
 const User = require("../models/user");
 const brcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+});
 
 const Login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -77,8 +84,27 @@ const GetAllUsers = async (req, res) => {
     console.log(users);
   } catch (error) {}
 };
+
+const UploadProfilePic = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+    const result = await cloudinary.uploader.upload(dataURI, {
+      resource_type: "auto",
+    });
+
+    const { secure_url } = result;
+
+    const image = await User.findByIdAndUpdate(id, { profilePic: secure_url });
+    console.log(image);
+  } catch (error) {}
+};
 module.exports = {
   Login,
   Register,
   GetUser,
+  UploadProfilePic,
 };

@@ -45,7 +45,7 @@ const AddCuisine = async (req, res) => {
     });
 
     const { secure_url } = result;
-    console.log(req.body);
+
     const addedCuisines = await Cuisines.create({
       ...req.body,
       imageUrl: secure_url,
@@ -62,7 +62,6 @@ const AddCuisine = async (req, res) => {
 
 const UpdateCuisine = async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.body);
 
   try {
     const cuisine = await Cuisines.findByIdAndUpdate(id, req.body, {
@@ -95,17 +94,33 @@ const VerifyCuisine = async (req, res) => {
 const GetApprovedCuisines = async (req, res) => {
   try {
     const cuisines = await Cuisines.find({ approved: true });
-    console.log(cuisines);
+
     res
       .status(200)
       .json({ cuisines: cuisines, messgae: "Fetched Succesfully" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ message: error });
   }
 };
 
-const deleteCuisines = (req, res) => {};
+const DeleteCuisines = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const response = await Cuisines.findByIdAndRemove(id);
+    if (response === null) {
+      return res
+        .status(402)
+        .json({ message: "Object Not Found Error", success: false });
+    } else {
+      return res
+        .status(200)
+        .json({ message: "Deleted Succesfully", success: true });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 const GetUnapprovedCuisines = async (req, res) => {
   try {
@@ -132,6 +147,36 @@ const GetAllProfileCuisines = async (req, res) => {
   }
 };
 
+const GetCuisinesNo = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const cuisines = await Cuisines.find({ user: id });
+
+    res.status(200).json({ length: cuisines.length, success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const GetAddedCuisines = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const cuisines = await Cuisines.find({ user: id });
+    const cuisinesAll = [];
+
+    const c = cuisines.map((item) => {
+      cuisinesAll.push(item.category);
+    });
+
+    res
+      .status(200)
+      .json({ message: "Categories Fetched", cuisines: cuisinesAll });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   AddCuisine,
   GetCuisines,
@@ -141,4 +186,7 @@ module.exports = {
   GetCuisine,
   GetApprovedCuisines,
   UpdateCuisine,
+  DeleteCuisines,
+  GetCuisinesNo,
+  GetAddedCuisines,
 };

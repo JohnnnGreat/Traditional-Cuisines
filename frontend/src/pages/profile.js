@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import AxiosInstance from "../axiosInstance";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { FcEmptyFilter } from "react-icons/fc";
 import { IoClose } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -25,7 +25,9 @@ const Profile = () => {
   const [userAddedCuisines, setUserAddedCuisines] = useState([]);
   const [userCuisines, setUserCuisines] = useState([]);
   const [id, setPostId] = useState("");
+  const [length, setLength] = useState(0);
   const form = useRef(null);
+  const [mouseHover, setMouseHover] = useState(false);
 
   // const data =
   //   JSON.parse(localStorage.getItem("data")) &&
@@ -53,6 +55,23 @@ const Profile = () => {
       }
     })();
   });
+
+  const [addedCuisines, setAddedCuisines] = useState([]);
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id } = data;
+    (async function () {
+      const response = await AxiosInstance.get(
+        `/cuisines/getaddedcuisines/${_id}`
+      );
+      const { data } = response;
+      const { cuisines } = data;
+      setAddedCuisines(cuisines);
+    })();
+  });
   const [isEdit, setIsEdit] = useState(false);
   const [record, setRecord] = useState(null);
   const {
@@ -75,6 +94,26 @@ const Profile = () => {
         },
     mode: "onChange",
   });
+
+  const handleDelete = async (record) => {
+    setIsLoading(true);
+    try {
+      const response = await AxiosInstance.delete(
+        `/cuisines/delete/${record._id}`
+      );
+      setIsLoading(false);
+      const { data } = response;
+      const { success, message } = data;
+      if (success) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      toast.error(error.message);
+    }
+  };
 
   const handleEdit = (record) => {
     setPostId(record._id);
@@ -118,7 +157,12 @@ const Profile = () => {
     const { _id } = data;
     const addedCuisines = async () => {
       try {
-        const response = await AxiosInstance.get(`/getcuisinesno/${_id}`);
+        const response = await AxiosInstance.get(
+          `/cuisines/getcuisinesno/${_id}`
+        );
+        const { data } = response;
+        const { length } = data;
+        setLength(length);
       } catch (error) {}
     };
 
@@ -154,10 +198,8 @@ const Profile = () => {
       const { data } = response;
       const { file } = data;
       setImagePath(file);
-      console.log(data);
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
     }
   };
   //Fetch User Data
@@ -265,7 +307,7 @@ const Profile = () => {
           <button
             className="approve-food"
             onClick={() => {
-              handleApprove(record);
+              handleDelete(record);
             }}
           >
             Delete
@@ -311,6 +353,28 @@ const Profile = () => {
       reset();
     }
   }
+  const [profileImage, setProfileImage] = useState("");
+
+  const uploadProfileImage = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id } = data;
+    try {
+      const response = await AxiosInstance.put(
+        `/users/updateprofile/${_id}`,
+        formData
+      );
+
+      toast.success("Profile Pic Updated");
+    } catch (error) {
+      console.log(error.message);
+      toast.error("An error occured");
+    }
+  };
   return (
     <>
       {isLoading && <Preloader />}
@@ -326,16 +390,32 @@ const Profile = () => {
                     className="profile__image"
                     alt="This is a profile image"
                   />
+
+                  <label htmlFor="image-photo" className="chooseimage">
+                    Choose Image
+                  </label>
+
+                  <input
+                    type="file"
+                    onChange={uploadProfileImage}
+                    id="image-photo"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
                 </div>
                 <div className="profile-details-con">
                   <h1 className="profile-name">{user?.fullName}</h1>
                   <p className="instance-details">User</p>
                   <Divider />
                   <h1 className="added-cuisine">Number of Added Cuisine</h1>
-                  <p className="instance-details">0</p>
+                  <p className="instance-details">{length}</p>
                   <Divider />
                   <h1>Added Categories</h1>
-                  <p className="instance-details">None</p>
+                  <p className="instance-details">
+                    {addedCuisines.map((cuisine) => (
+                      <span>{cuisine}</span>
+                    ))}
+                  </p>
                   <Divider />
                 </div>
               </div>
