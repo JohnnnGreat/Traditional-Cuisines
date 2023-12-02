@@ -85,7 +85,7 @@ const GetAllUsers = async (req, res) => {
   } catch (error) {}
 };
 
-const UploadProfilePic = async (req, res) => {
+const UploadProfilePic = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -98,9 +98,14 @@ const UploadProfilePic = async (req, res) => {
 
     const { secure_url } = result;
 
-    const image = await User.findByIdAndUpdate(id, { profilePic: secure_url });
-    console.log(image);
-  } catch (error) {}
+    await User.findByIdAndUpdate(id, { profilePic: secure_url });
+    res.status(200).json({
+      success: true,
+      message: "Profile picture updated successfully, Please reload!",
+    });
+  } catch (error) {
+    next(error.message);
+  }
 };
 module.exports = {
   Login,

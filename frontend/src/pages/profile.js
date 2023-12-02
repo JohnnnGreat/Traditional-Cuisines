@@ -356,6 +356,7 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState("");
 
   const uploadProfileImage = async (e) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     if (JSON.parse(localStorage.getItem("data"))) {
@@ -368,9 +369,12 @@ const Profile = () => {
         `/users/updateprofile/${_id}`,
         formData
       );
-
-      toast.success("Profile Pic Updated");
+      setIsLoading(false);
+      const { data } = response;
+      const { message } = data;
+      toast.success(message);
     } catch (error) {
+      setIsLoading(false);
       console.log(error.message);
       toast.error("An error occured");
     }
