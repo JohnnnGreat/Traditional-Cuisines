@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { foodData } from "@/foodData";
 import Divider from "@/components/Divider";
+import AxiosInstance from "@/axiosInstance";
 const Cuisines = () => {
   const [categories, setCategories] = useState([]);
 
@@ -20,6 +21,18 @@ const Cuisines = () => {
     }
 
     console.log(newArray);
+  });
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await AxiosInstance.get("/cuisines/approvedcuisines");
+
+        console.log(response);
+      } catch (error) {
+        console.log(error.message);
+      }
+    })();
   });
   return (
     <div className="cuisines">

@@ -404,6 +404,11 @@ $semi-gray: #7c7c7c;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       margin-top: 4rem;
+      gap: 1rem;
+
+      @media (max-width: 567px) {
+        grid-template-columns: 1fr;
+      }
 
       .food-grd-container {
         display: flex;
@@ -417,6 +422,10 @@ $semi-gray: #7c7c7c;
         border-radius: 10px;
         box-shadow: 0 0 10px 4px rgba(173, 173, 173, 0.247);
         padding: 1rem;
+
+        @media (max-width: 567px) {
+          width: 90%;
+        }
 
         img {
           width: 100%;
@@ -444,6 +453,10 @@ $semi-gray: #7c7c7c;
           border-radius: 5px;
           padding: 0.6rem;
           margin-top: 0.5rem;
+
+          @media (max-width: 567px) {
+            width: 100%;
+          }
         }
       }
       .see_more {
@@ -503,15 +516,17 @@ $semi-gray: #7c7c7c;
     justify-content: center;
 
     h1 {
-      font-size: 3rem;
+      font-size: calc(64px / 16px) + rem;
       color: #fff;
-
+      line-height: 1;
       text-align: center;
     }
 
     p {
       font-weight: 300;
       color: #fff;
+      text-align: center;
+      margin-top: 0.7rem;
     }
 
     div {
@@ -523,7 +538,12 @@ $semi-gray: #7c7c7c;
 
     form {
       margin-top: 1.4rem;
+
       width: fit-content;
+
+      @media (max-width: 567px) {
+        width: 100%;
+      }
       input {
         outline: none;
         padding: 0.9rem 1rem;
@@ -532,6 +552,10 @@ $semi-gray: #7c7c7c;
         width: 400px;
         box-shadow: 0 0 4px 5px rgba(0, 0, 0, 0.082);
         border-radius: 6px;
+
+        @media (max-width: 567px) {
+          width: 100%;
+        }
       }
 
       button {
@@ -542,12 +566,49 @@ $semi-gray: #7c7c7c;
         border-radius: 6px;
         color: #fff;
         transition: 300ms ease;
-
+        margin-top: 1rem;
         &:hover {
           background-color: #fff;
           color: $primary-color;
           transition: 300ms ease;
         }
+      }
+    }
+  }
+}
+
+.projects {
+  padding: 4rem 0;
+  &__wrapper {
+    max-width: 1200px;
+    margin: auto;
+    height: 100%;
+
+    main {
+      height: 100%;
+
+      h1 {
+        width: 500px;
+        font-size: calc(64px / 16px) + rem;
+        line-height: 1;
+        color: #363636;
+
+        span {
+          color: $primary-color;
+        }
+      }
+    }
+
+    .image-p-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      margin-top: 2rem;
+      img {
+        width: 700px;
+        border-radius: 10px;
+        border: 1px solid $primary-color;
       }
     }
   }

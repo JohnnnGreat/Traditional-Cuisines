@@ -1,6 +1,7 @@
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const Cuisines = require("../models/cuisines");
+const User = require("../models/user");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -95,9 +96,32 @@ const GetApprovedCuisines = async (req, res) => {
   try {
     const cuisines = await Cuisines.find({ approved: true });
 
+    cuisines.map((item) => {
+      const { user } = item;
+
+      async function GetConvObj() {
+        const userDetails = await User.findOne({ _id: user });
+
+        const { fullName } = userDetails;
+
+        const userObject = {
+          ...item._doc,
+          fullName,
+        };
+
+        console.log(item);
+
+        return userObject;
+      }
+
+      const data = GetConvObj().then((result) => {
+        console.log(result);
+      });
+    });
+
     res
       .status(200)
-      .json({ cuisines: cuisines, messgae: "Fetched Succesfully" });
+      .json({ cuisines: cuisines, message: "Fetched Succesfully" });
   } catch (error) {
     res.status(401).json({ message: error });
   }

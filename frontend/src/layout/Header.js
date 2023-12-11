@@ -31,6 +31,8 @@ const Header = () => {
 
     router.push("/auth/login");
   };
+
+  const [navOpen, setNavOpen] = useState(false);
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -40,7 +42,15 @@ const Header = () => {
               Soul<span>Food.</span>
             </h1>
           </div>
-          <div className="main">
+          <div className={`main ${navOpen && "opennav"} `}>
+            <button
+              className="close-btn"
+              onClick={() => {
+                setNavOpen(false);
+              }}
+            >
+              close
+            </button>
             <nav>
               <ul>
                 {nav.map((item, index) => (
@@ -67,6 +77,14 @@ const Header = () => {
               </div>
             )}
           </div>
+          <button
+            className="menu-btn"
+            onClick={() => {
+              setNavOpen(true);
+            }}
+          >
+            menu
+          </button>
         </div>
       </div>
     </header>

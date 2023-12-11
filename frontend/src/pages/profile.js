@@ -179,6 +179,7 @@ const Profile = () => {
     formData.append("description", values.description);
     formData.append("method", values.method);
     formData.append("ingredients", values.ingredients);
+    formData.append("nutrition", values.nutrition);
     formData.append("time", values.time);
     formData.append("category", values.category);
     formData.append("image", file);

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AxiosInstance from "@/axiosInstance";
 import toast, { Toaster } from "react-hot-toast";
+import ScreenImage from "../../public/ScreenImage.png";
 
 export default function Home() {
   const router = useRouter();
@@ -133,6 +134,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <div className="projects">
+        <div className="projects__wrapper">
+          <main>
+            <h1>
+              Get started with a simple <span>query</span> .....
+            </h1>
+            <div className="image-p-container">
+              <Image src={ScreenImage} />
+            </div>
+          </main>
+        </div>
+      </div>
     </>
   );
 }
