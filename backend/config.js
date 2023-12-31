@@ -5,7 +5,6 @@ dotenv.config();
 
 // DB Url
 const DB_URL = process.env.DB_URL;
-console.log(DB_URL);
 
 const connectToDb = async () => {
   try {

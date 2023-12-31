@@ -4,6 +4,8 @@ const {
   Login,
   GetUser,
   UploadProfilePic,
+  GenerateCode,
+  VerifyUser,
 } = require("../controllers/User");
 const jsonToken = require("../middlewares/jsonToken");
 const multer = require("multer");
@@ -22,5 +24,8 @@ router.post("/login", Login);
 
 router.get("/getuser/:id", jsonToken, GetUser);
 router.put("/updateprofile/:id", upload.single("image"), UploadProfilePic);
+
+router.post("/generateCode", GenerateCode);
+router.post("/verifyUser", VerifyUser);
 
 module.exports = router;

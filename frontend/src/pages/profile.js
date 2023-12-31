@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { Table, Space } from "antd";
 import Preloader from "@/components/Preloader";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const Profile = () => {
   const [token, setToken] = useState("");
@@ -28,11 +29,57 @@ const Profile = () => {
   const [length, setLength] = useState(0);
   const form = useRef(null);
   const [mouseHover, setMouseHover] = useState(false);
+  const [LinkSent, setLinkSent] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
 
-  // const data =
-  //   JSON.parse(localStorage.getItem("data")) &&
-  //   JSON.parse(localStorage.getItem("data"));
-  // const { _id } = data;
+  const [isVerified, setIsVerified] = useState(false);
+
+  // Verify profile
+  const router = useRouter();
+
+  const code = router?.query?.code;
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id, email } = data;
+    (async function () {
+      try {
+        const response = await AxiosInstance.post("/users/verifyUser", {
+          email,
+          code,
+        });
+
+        console.log(response);
+      } catch (error) {}
+    })();
+  }, []);
+
+  const GenerateToken = async () => {
+    if (JSON.parse(localStorage.getItem("data"))) {
+      var data = JSON.parse(localStorage.getItem("data"));
+    }
+
+    const { _id, email } = data;
+    alert("kk");
+    try {
+      const response = await AxiosInstance.post("/users/generateCode", {
+        _id,
+        email,
+      });
+
+      const { data } = response;
+      const { success } = data;
+
+      if (success) {
+        setLinkSent(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("data"))) {
@@ -129,7 +176,6 @@ const Profile = () => {
     setIsEdit(true);
 
     const formValues = getValues();
-    console.log(formValues);
 
     setRecord(record);
     setShowForm(true);
@@ -145,7 +191,6 @@ const Profile = () => {
     reader.onload = (event) => {
       const objectURL = event.target.result;
       setImageUrl(objectURL);
-      console.log(imageUrl);
     };
   };
 
@@ -203,6 +248,7 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
+
   //Fetch User Data
   useEffect(() => {
     try {
@@ -216,10 +262,15 @@ const Profile = () => {
             const response = await AxiosInstance.get(`/users/getuser/${_id}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
-            const { success, userData } = response.data;
 
+            const { success, userData } = response.data;
+            console.log(userData.verified);
+            if (userData.verified) {
+              setEmailVerified(true);
+            }
             if (success) {
               setUser(userData);
+              setIsVerified(userData.verified);
             }
           }
         }
@@ -240,7 +291,7 @@ const Profile = () => {
 
       setToken(token);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (token) setIsValidated(true);
@@ -340,7 +391,7 @@ const Profile = () => {
 
       const response = await AxiosInstance.put(`/cuisines/update/${id}`, form);
       const { data } = response;
-      console.log(data);
+
       const { success, message } = data;
 
       if (success) {
@@ -376,16 +427,41 @@ const Profile = () => {
       toast.success(message);
     } catch (error) {
       setIsLoading(false);
-      console.log(error.message);
+
       toast.error("An error occured");
     }
   };
+
   return (
     <>
       {isLoading && <Preloader />}
       <Toaster />
       {isValidated ? (
         <>
+          {emailVerified ? (
+            <div>
+              {LinkSent ? (
+                <div>A Link has been Sent to your registered email address</div>
+              ) : (
+                <div className="w-full">
+                  <div className="max-w-[1000px] bg-red-100 p-[1.6rem] mx-auto flex gap-[.6rem] items-center">
+                    <p className="text-red-500">
+                      You are yet to verify your account
+                    </p>
+                    <button
+                      onClick={GenerateToken}
+                      className="border-[1px] border-red-500 py-[.6rem] px-[1rem]"
+                    >
+                      Click to Verify
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div> Email Verified</div>
+          )}
+
           <section className="profile_details">
             <div className="profile_details_wrapper">
               <div className="profile_grid">

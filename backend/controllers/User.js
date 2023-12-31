@@ -2,6 +2,8 @@ const User = require("../models/user");
 const brcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cloudinary = require("cloudinary").v2;
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -107,9 +109,92 @@ const UploadProfilePic = async (req, res, next) => {
     next(error.message);
   }
 };
+
+const GenerateCode = async (req, res) => {
+  console.log(req.body);
+  try {
+    const { email, id } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("User not found");
+
+    const { verified } = user;
+    console.log(verified);
+
+    const value = [];
+
+    for (let i = 1; i <= 6; i++) {
+      value.push(GenerateRandomValues());
+    }
+
+    const stringRepresentation = value.join(",").replace(/,/g, "");
+
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      {
+        vCode: stringRepresentation,
+      },
+      {
+        new: true,
+      }
+    );
+    updateUser.save();
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "johnossai20@gmail.com",
+        pass: "kblgyogjwalbiwja",
+      },
+    });
+
+    const mailData = {
+      from: `johnossai20@gmail.com`,
+      to: "JOHN OSSAI <johnossai20@gmail.com>",
+      subject: `Verify Email Address`,
+      html: `Click the link to verify http://localhost:3000/profile?code=${stringRepresentation}`,
+    };
+
+    await transporter.sendMail(mailData);
+
+    res.status(200).json({ message: "A link have been sent", success: true });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+const VerifyUser = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    const user = await User.findOne({ email });
+    const { _id, vCode } = user;
+
+    if (vCode === code) {
+      const updateUser = await User.findByIdAndUpdate(
+        _id,
+        { verified: true },
+        { new: true }
+      );
+    }
+
+    res.status(200).json({ message: "User verified succesfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+function GenerateRandomValues() {
+  const randomBytes = crypto.randomBytes(1); // Use 1 byte for a number between 0 and 255
+  const randomNumber = randomBytes.readUInt8(0);
+
+  const scaledRandomNumber = 1 + (randomNumber % 6);
+  return scaledRandomNumber;
+}
+
 module.exports = {
   Login,
   Register,
   GetUser,
   UploadProfilePic,
+  GenerateCode,
+  VerifyUser,
 };

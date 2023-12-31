@@ -1,7 +1,7 @@
 const Newsletter = require("../models/newsletters");
 const AddEmail = async (req, res, next) => {
   const { email } = req.body;
-  console.log(email);
+
   try {
     const newsletters = await Newsletter.findOne({ email });
     if (newsletters)
