@@ -8,7 +8,8 @@ export const foodData = [
     description:
       "A spicy rice dish cooked with tomato sauce and other seasonings",
     id: 1,
-    image: "https://unsplash.com/s/photos/jollof-rice",
+    image:
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgrandbaby-cakes.com%2Fjollof-rice-recipe%2F&psig=AOvVaw2HS5nKHcxQZ5Ap5enuHc6A&ust=1704232212307000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCPjTwfCVvYMDFQAAAAAdAAAAABAH",
     method:
       "Boil the rice, fry the tomato sauce, mix them together and simmer until done",
     nutrition: [
@@ -38,7 +39,8 @@ export const foodData = [
     name: "Fried Rice",
     description: "A rice dish stir-fried with mixed vegetables and meat",
     id: 2,
-    image: "https://www.freepik.com/free-photos-vectors/fried-rice",
+    image:
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fallnigerianfoods.com%2Fnigerian-fried-rice%2F&psig=AOvVaw29RkLzlEoqdPfsOzguccRp&ust=1704232240771000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOCBsv-VvYMDFQAAAAAdAAAAABAI",
     method:
       "Parboil the rice, fry the vegetables and meat, mix them with the rice and seasonings",
     nutrition: "Calories: 333, Protein: 9.9g, Carbs: 53.4g, Fat: 9.4g",
@@ -66,7 +68,8 @@ export const foodData = [
     name: "Coconut Rice",
     description: "A rice dish cooked with coconut milk and spices",
     id: 3,
-    image: "https://www.freepik.com/free-photos-vectors/coconut-rice",
+    image:
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.preciouscore.com%2Fcameroonian-coconut-rice%2F&psig=AOvVaw0IgIo7v669qjYO46bQQXZy&ust=1704232277712000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKD9wY-WvYMDFQAAAAAdAAAAABAD",
     method:
       "Extract the coconut milk, boil the rice with the milk and seasonings, add more water if needed",
     nutrition: "Calories: 403, Protein: 6.8g, Carbs: 68.9g, Fat: 11.9g",

@@ -12,11 +12,13 @@ import { Table, Space } from "antd";
 import Preloader from "@/components/Preloader";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import ProfileDisplay from "@/components/profile/ProfileDisplay";
+import CuisineTable from "@/components/profile/cuisines/CuisineTable";
 
 const Profile = () => {
   const [token, setToken] = useState("");
   const [isValidated, setIsValidated] = useState(false);
-  const [user, setUser] = useState({});
+
   const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -24,38 +26,53 @@ const Profile = () => {
   const [fileName, setFileName] = useState("");
   const [imagePath, setImagePath] = useState("");
   const [userAddedCuisines, setUserAddedCuisines] = useState([]);
-  const [userCuisines, setUserCuisines] = useState([]);
-  const [id, setPostId] = useState("");
-  const [length, setLength] = useState(0);
+
   const form = useRef(null);
-  const [mouseHover, setMouseHover] = useState(false);
+
   const [LinkSent, setLinkSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
 
   const [isVerified, setIsVerified] = useState(false);
 
+  const [imageUrl, setImageUrl] = useState(null);
+  const handleFile = (e) => {
+    setFile(e.target.files[0]);
+
+    setFileName(e.target.files[0].name);
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const objectURL = event.target.result;
+      setImageUrl(objectURL);
+    };
+  };
   // Verify profile
   const router = useRouter();
 
   const code = router?.query?.code;
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("data"))) {
-      var data = JSON.parse(localStorage.getItem("data"));
+    if (code) {
+      console.log("Stt");
+      if (JSON.parse(localStorage.getItem("data"))) {
+        var data = JSON.parse(localStorage.getItem("data"));
+      }
+      const { _id, email } = data;
+      (async function () {
+        try {
+          const response = await AxiosInstance.post("/users/verifyUser", {
+            email,
+            code,
+          });
+
+          console.log(response);
+
+          setEmailVerified(true);
+        } catch (error) {}
+      })();
     }
-
-    const { _id, email } = data;
-    (async function () {
-      try {
-        const response = await AxiosInstance.post("/users/verifyUser", {
-          email,
-          code,
-        });
-
-        console.log(response);
-      } catch (error) {}
-    })();
-  }, []);
+  }, [code]);
 
   const GenerateToken = async () => {
     if (JSON.parse(localStorage.getItem("data"))) {
@@ -63,16 +80,17 @@ const Profile = () => {
     }
 
     const { _id, email } = data;
-    alert("kk");
+
     try {
       const response = await AxiosInstance.post("/users/generateCode", {
         _id,
         email,
       });
+      console.log(response);
 
       const { data } = response;
       const { success } = data;
-
+      console.log(success);
       if (success) {
         setLinkSent(true);
       }
@@ -101,24 +119,8 @@ const Profile = () => {
         console.log(error);
       }
     })();
-  });
+  }, [userAddedCuisines]);
 
-  const [addedCuisines, setAddedCuisines] = useState([]);
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("data"))) {
-      var data = JSON.parse(localStorage.getItem("data"));
-    }
-
-    const { _id } = data;
-    (async function () {
-      const response = await AxiosInstance.get(
-        `/cuisines/getaddedcuisines/${_id}`
-      );
-      const { data } = response;
-      const { cuisines } = data;
-      setAddedCuisines(cuisines);
-    })();
-  });
   const [isEdit, setIsEdit] = useState(false);
   const [record, setRecord] = useState(null);
   const {
@@ -141,79 +143,6 @@ const Profile = () => {
         },
     mode: "onChange",
   });
-
-  const handleDelete = async (record) => {
-    setIsLoading(true);
-    try {
-      const response = await AxiosInstance.delete(
-        `/cuisines/delete/${record._id}`
-      );
-      setIsLoading(false);
-      const { data } = response;
-      const { success, message } = data;
-      if (success) {
-        toast.success(message);
-      } else {
-        toast.error(message);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      toast.error(error.message);
-    }
-  };
-
-  const handleEdit = (record) => {
-    setPostId(record._id);
-
-    setValue("name", record.name);
-    setValue("description", record.description);
-    setValue("method", record.method);
-    setValue("ingredients", record.ingredients);
-    setValue("category", record.category);
-    setValue("time", record.time);
-    setValue("image", record.imageUrl);
-
-    setIsEdit(true);
-
-    const formValues = getValues();
-
-    setRecord(record);
-    setShowForm(true);
-  };
-  const [imageUrl, setImageUrl] = useState(null);
-  const handleFile = (e) => {
-    setFile(e.target.files[0]);
-
-    setFileName(e.target.files[0].name);
-
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      const objectURL = event.target.result;
-      setImageUrl(objectURL);
-    };
-  };
-
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("data"))) {
-      var data = JSON.parse(localStorage.getItem("data"));
-    }
-
-    const { _id } = data;
-    const addedCuisines = async () => {
-      try {
-        const response = await AxiosInstance.get(
-          `/cuisines/getcuisinesno/${_id}`
-        );
-        const { data } = response;
-        const { length } = data;
-        setLength(length);
-      } catch (error) {}
-    };
-
-    addedCuisines();
-  });
-
   const submitHandler = async (values) => {
     setIsLoading(true);
     setShowForm(false);
@@ -249,37 +178,6 @@ const Profile = () => {
     }
   };
 
-  //Fetch User Data
-  useEffect(() => {
-    try {
-      (async function () {
-        if (isValidated) {
-          if (localStorage.getItem("data")) {
-            const data = JSON.parse(localStorage.getItem("data"));
-            const { _id } = data;
-            const token = localStorage.getItem("token");
-
-            const response = await AxiosInstance.get(`/users/getuser/${_id}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-
-            const { success, userData } = response.data;
-            console.log(userData.verified);
-            if (userData.verified) {
-              setEmailVerified(true);
-            }
-            if (success) {
-              setUser(userData);
-              setIsVerified(userData.verified);
-            }
-          }
-        }
-      })();
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   const closeMo = () => {
     setShowForm(false);
   };
@@ -295,93 +193,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (token) setIsValidated(true);
-  });
-
-  useEffect(() => {
-    (async function () {
-      try {
-        if (localStorage.getItem("data")) {
-          const dataContent = JSON.parse(localStorage.getItem("data"));
-          const { _id } = dataContent;
-
-          const response = await AxiosInstance.get(
-            `/cuisines/getallprofilecuisines/${_id}`
-          );
-
-          const { data } = response;
-          const { cuisines } = data;
-          setUserCuisines(cuisines);
-        }
-      } catch (error) {}
-    })();
-  });
-
-  const columns = [
-    // {
-    //   title: "ID",
-    //   dataIndex: "id",
-    //   //   render: (text) => <a>{text}</a>,
-    // },
-    {
-      title: "Name",
-      dataIndex: "name",
-      //   render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-    },
-    {
-      title: "Method",
-      dataIndex: "method",
-    },
-
-    {
-      title: "Ingredients",
-      dataIndex: "ingredients",
-    },
-
-    {
-      title: "Category",
-      dataIndex: "category",
-    },
-
-    {
-      title: "Time",
-      dataIndex: "time",
-    },
-
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <button
-            className="approve-food"
-            onClick={() => {
-              handleDelete(record);
-            }}
-          >
-            Delete
-          </button>
-          <button
-            className="view-food"
-            onClick={() => {
-              handleEdit(record);
-            }}
-          >
-            Edit
-          </button>
-        </Space>
-      ),
-    },
-  ];
-
-  const data = [];
-
-  userCuisines?.map((item) => {
-    data.push(item);
-  });
+  }, [token]);
 
   async function editHandler(record) {
     setIsLoading(true);
@@ -440,6 +252,15 @@ const Profile = () => {
         <>
           {emailVerified ? (
             <div>
+              <div className="max-w-[1100px] e mx-auto py-[.4rem] px-[.7rem] rounded-sm mt-[.8rem]">
+                Account Status{" "}
+                <span className="py-[.4rem] px-[.7rem] rounded-lg bg-green-600 text-white">
+                  Verified
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div>
               {LinkSent ? (
                 <div>A Link has been Sent to your registered email address</div>
               ) : (
@@ -458,50 +279,11 @@ const Profile = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <div> Email Verified</div>
           )}
-
-          <section className="profile_details">
-            <div className="profile_details_wrapper">
-              <div className="profile_grid">
-                <div className="profile-image">
-                  <img
-                    src={user?.profilePic}
-                    className="profile__image"
-                    alt="This is a profile image"
-                  />
-
-                  <label htmlFor="image-photo" className="chooseimage">
-                    Choose Image
-                  </label>
-
-                  <input
-                    type="file"
-                    onChange={uploadProfileImage}
-                    id="image-photo"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                  />
-                </div>
-                <div className="profile-details-con">
-                  <h1 className="profile-name">{user?.fullName}</h1>
-                  <p className="instance-details">User</p>
-                  <Divider />
-                  <h1 className="added-cuisine">Number of Added Cuisine</h1>
-                  <p className="instance-details">{length}</p>
-                  <Divider />
-                  <h1>Added Categories</h1>
-                  <p className="instance-details">
-                    {addedCuisines.map((cuisine) => (
-                      <span>{cuisine}</span>
-                    ))}
-                  </p>
-                  <Divider />
-                </div>
-              </div>
-            </div>
-          </section>
+          <ProfileDisplay
+            setEmailVerified={setEmailVerified}
+            setIsVerified={setIsVerified}
+          />
 
           {userAddedCuisines.length <= 0 ? (
             <div className="cuisines__added">
@@ -520,19 +302,9 @@ const Profile = () => {
               </div>
             </div>
           ) : (
-            <div className="display_table">
-              <div className="display-table__wrapper">
-                <button
-                  className="add_cuisine_btn"
-                  onClick={() => {
-                    setShowForm(true);
-                  }}
-                >
-                  Add a cuisine
-                </button>
-                <Table columns={columns} dataSource={data} />
-              </div>
-            </div>
+            <>
+              <CuisineTable setShowForm={setShowForm} />
+            </>
           )}
         </>
       ) : (

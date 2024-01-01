@@ -68,6 +68,7 @@ const Register = async (req, res, next) => {
 
 const GetUser = async (req, res, next) => {
   const { id } = req.params;
+  console.log(id);
   try {
     const user = await User.findById(id);
     if (!user)
@@ -113,51 +114,55 @@ const UploadProfilePic = async (req, res, next) => {
 const GenerateCode = async (req, res) => {
   console.log(req.body);
   try {
-    const { email, id } = req.body;
+    const { email, _id } = req.body;
 
     const user = await User.findOne({ email });
     if (!user) throw new Error("User not found");
 
     const { verified } = user;
-    console.log(verified);
+    if (verified) {
+      throw new Error("User Already Verified");
+    } else {
+      const value = [];
 
-    const value = [];
-
-    for (let i = 1; i <= 6; i++) {
-      value.push(GenerateRandomValues());
-    }
-
-    const stringRepresentation = value.join(",").replace(/,/g, "");
-
-    const updateUser = await User.findByIdAndUpdate(
-      id,
-      {
-        vCode: stringRepresentation,
-      },
-      {
-        new: true,
+      for (let i = 1; i <= 6; i++) {
+        value.push(GenerateRandomValues());
       }
-    );
-    updateUser.save();
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "johnossai20@gmail.com",
-        pass: "kblgyogjwalbiwja",
-      },
-    });
 
-    const mailData = {
-      from: `johnossai20@gmail.com`,
-      to: "JOHN OSSAI <johnossai20@gmail.com>",
-      subject: `Verify Email Address`,
-      html: `Click the link to verify http://localhost:3000/profile?code=${stringRepresentation}`,
-    };
+      const stringRepresentation = value.join(",").replace(/,/g, "");
 
-    await transporter.sendMail(mailData);
+      const updateUser = await User.findByIdAndUpdate(
+        _id,
+        {
+          vCode: stringRepresentation,
+        },
+        {
+          new: true,
+        }
+      );
+      // updateUser.save();
+      console.log(updateUser);
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "johnossai20@gmail.com",
+          pass: "kblgyogjwalbiwja",
+        },
+      });
 
-    res.status(200).json({ message: "A link have been sent", success: true });
+      const mailData = {
+        from: `johnossai20@gmail.com`,
+        to: "JOHN OSSAI <johnossai20@gmail.com>",
+        subject: `Verify Email Address`,
+        html: `Click the link to verify http://localhost:3000/profile?code=${stringRepresentation}`,
+      };
+
+      await transporter.sendMail(mailData);
+
+      res.status(200).json({ message: "A link have been sent", success: true });
+    }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error.message });
   }
 };
