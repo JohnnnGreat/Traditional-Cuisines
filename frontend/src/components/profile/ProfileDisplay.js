@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Divider from "../Divider";
 import AxiosInstance from "../../axiosInstance";
+import Preloader from "@/components/Preloader";
+import toast, { Toaster } from "react-hot-toast";
 
 const ProfileDisplay = ({ setEmailVerified, setIsVerified }) => {
   const [user, setUser] = useState({});
   const [length, setLength] = useState(0);
   const [token, setToken] = useState("");
   const [addedCuisines, setAddedCuisines] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (token) setIsValidated(true);
@@ -114,46 +117,49 @@ const ProfileDisplay = ({ setEmailVerified, setIsVerified }) => {
   }, [token]);
 
   return (
-    <section className="profile_details">
-      <div className="profile_details_wrapper">
-        <div className="profile_grid">
-          <div className="profile-image">
-            <img
-              src={user?.profilePic}
-              className="profile__image"
-              alt="This is a profile image"
-            />
+    <>
+      {isLoading && <Preloader />}
+      <section className="profile_details">
+        <div className="profile_details_wrapper">
+          <div className="profile_grid">
+            <div className="profile-image">
+              <img
+                src={user?.profilePic}
+                className="profile__image"
+                alt="This is a profile image"
+              />
 
-            <label htmlFor="image-photo" className="chooseimage">
-              Choose Image
-            </label>
+              <label htmlFor="image-photo" className="chooseimage">
+                Choose Image
+              </label>
 
-            <input
-              type="file"
-              onChange={uploadProfileImage}
-              id="image-photo"
-              accept="image/*"
-              style={{ display: "none" }}
-            />
-          </div>
-          <div className="profile-details-con">
-            <h1 className="profile-name">{user?.fullName}</h1>
-            <p className="instance-details">User</p>
-            <Divider />
-            <h1 className="added-cuisine">Number of Added Cuisine</h1>
-            <p className="instance-details">{length}</p>
-            <Divider />
-            <h1>Added Categories</h1>
-            <p className="instance-details">
-              {addedCuisines.map((cuisine) => (
-                <span>{cuisine}</span>
-              ))}
-            </p>
-            <Divider />
+              <input
+                type="file"
+                onChange={uploadProfileImage}
+                id="image-photo"
+                accept="image/*"
+                style={{ display: "none" }}
+              />
+            </div>
+            <div className="profile-details-con">
+              <h1 className="profile-name">{user?.fullName}</h1>
+              <p className="instance-details">User</p>
+              <Divider />
+              <h1 className="added-cuisine">Number of Added Cuisine</h1>
+              <p className="instance-details">{length}</p>
+              <Divider />
+              <h1>Added Categories</h1>
+              <p className="instance-details">
+                {addedCuisines.map((cuisine) => (
+                  <span>{cuisine}</span>
+                ))}
+              </p>
+              <Divider />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

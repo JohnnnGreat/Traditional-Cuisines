@@ -359,7 +359,13 @@ $semi-gray: #7c7c7c;
     margin: auto;
 
     h1 {
-      font-size: 5rem;
+      font-size: 4rem;
+
+      @media (max-width: 567px) {
+        font-size: 45px;
+
+        max-width: 100%;
+      }
     }
   }
 }
@@ -636,5 +642,56 @@ $semi-gray: #7c7c7c;
         border: 1px solid $primary-color;
       }
     }
+  }
+}
+
+.first-cuisines {
+  div {
+  }
+}
+
+.cuisines-flex {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.cuisine-card {
+  width: 300px;
+  padding: 0.7rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  @media (max-width: 567px) {
+    width: 100%;
+  }
+  .cuisine-name {
+    font-size: 1.2rem;
+    white-space: nowrap;
+    color: rgb(12, 12, 12);
+    margin-top: 0.7rem;
+  }
+
+  .cuisine-p {
+    white-space: nowrap;
+    font-weight: 300;
+  }
+
+  .cuisine-img-con {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+
+    .cuisine-c-d {
+      background: #00000033;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 100;
+    }
+  }
+  img {
   }
 }
