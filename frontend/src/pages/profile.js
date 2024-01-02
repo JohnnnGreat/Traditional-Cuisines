@@ -143,6 +143,23 @@ const Profile = () => {
         },
     mode: "onChange",
   });
+
+  const closeMo = () => {
+    setShowForm(false);
+  };
+  //Check if the token is stored in the localstoreage
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      //access the token
+      const token = localStorage.getItem("token");
+
+      setToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) setIsValidated(true);
+  }, [token]);
   const submitHandler = async (values) => {
     setIsLoading(true);
     setShowForm(false);
@@ -177,24 +194,6 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
-
-  const closeMo = () => {
-    setShowForm(false);
-  };
-  //Check if the token is stored in the localstoreage
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      //access the token
-      const token = localStorage.getItem("token");
-
-      setToken(token);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (token) setIsValidated(true);
-  }, [token]);
-
   async function editHandler(record) {
     setIsLoading(true);
     setShowForm(false);
@@ -303,7 +302,7 @@ const Profile = () => {
             </div>
           ) : (
             <>
-              <CuisineTable setShowForm={setShowForm} />
+              <CuisineTable setShowForm={setShowForm} showForm={showForm} />
             </>
           )}
         </>
@@ -322,6 +321,7 @@ const Profile = () => {
           <div
             className="closebtn"
             onClick={() => {
+              reset();
               setShowForm(false);
             }}
           >

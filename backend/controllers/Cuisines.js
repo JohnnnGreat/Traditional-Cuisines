@@ -2,6 +2,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const Cuisines = require("../models/cuisines");
 const User = require("../models/user");
+const foodData = require("../foodData");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -11,13 +12,61 @@ cloudinary.config({
 
 const upload = multer({ dest: "uploads/" });
 
+async function AddExternalCuisines() {
+  const {
+    name,
+    description,
+    method,
+    nutrition,
+    ingredients,
+    image,
+    category,
+    time,
+  } = foodData;
+  try {
+    const data = foodData.map((item) => {
+      const addedCuisines = Cuisines.create({
+        name: item.name,
+        description: item.description,
+        method: item.method,
+        nutrition: item.nutrition,
+        ingredients: item.ingredients,
+        imageUrl: item.image,
+        category: item.category,
+        time: item.time,
+        user: "Admin",
+      });
+    });
+
+    console.log("Cuisines added ");
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function Update() {
+  try {
+    const cuisines = await Cuisines.updateMany(
+      { approved: false },
+      { approved: true }
+    );
+
+    console.log(cuisines);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Update();
+// AddExternalCuisines();
 const GetCuisine = async (req, res) => {
   const { id } = req.params;
 
   try {
     const cuisine = await Cuisine.find({ id });
     res.status(200).json({ message: "Cuisine Fetched Succesfully", cuisine });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const GetCuisines = async (req, res) => {
@@ -108,15 +157,10 @@ const GetApprovedCuisines = async (req, res) => {
           ...item._doc,
           fullName,
         };
-
-        console.log(item);
-
         return userObject;
       }
 
-      const data = GetConvObj().then((result) => {
-        console.log(result);
-      });
+      // const data = GetConvObj().then((result) => {});
     });
 
     res

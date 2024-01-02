@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { foodData } from "@/foodData";
 import Divider from "@/components/Divider";
 import Link from "next/link";
+import AxiosInstance from "@/axiosInstance";
 
 const FoodItem = () => {
   const router = useRouter();
@@ -22,12 +23,19 @@ const FoodItem = () => {
   // }, [router.query.foodName]);
 
   useEffect(() => {
-    const foodNameQ = router.query.name;
-    const foodObject = foodData.filter((foodDetails) => {
-      return foodDetails.name == foodNameQ;
-    });
+    // const foodNameQ = router.query.name;
+    // const foodObject = foodData.filter((foodDetails) => {
+    //   return foodDetails.name == foodNameQ;
+    // });
 
-    setFoodMain(foodObject[0]);
+    // setFoodMain(foodObject[0]);
+
+    (async function () {
+      try {
+        const response = await AxiosInstance.get("/cuisines/approvedcuisines");
+        console.log(response);
+      } catch (error) {}
+    })();
   }, [router.query.name]);
 
   const convertArray = (string) => {
@@ -52,19 +60,11 @@ const FoodItem = () => {
     return nutritionObjects;
   }
 
-  console.log(
-    convertObject("Calories: 403, Protein: 6.8g, Carbs: 68.9g, Fat: 11.9g")
-  );
-
   return (
     <div className="food-main">
       <div className="food-main__wrapper">
         <div className="food_display">
-          <img
-            src="https://images.unsplash.com/photo-1540100716001-4b432820e37f?q=80&w=1512&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Alt"
-            className="food_image-main"
-          />
+          <img src={foodMain?.image} alt="Alt" className="food_image-main" />
           <div className="text_details">
             {" "}
             <h1 className="food_main-name">{foodMain?.name}</h1>

@@ -1,5 +1,5 @@
 // An array of arrays of Nigerian cuisines and their details
-export const foodData = [
+const foodData = [
   // A sub-array for each cuisine
 
   {
@@ -869,3 +869,5 @@ export const foodData = [
     time: "45 minutes",
   },
 ];
+
+module.exports = foodData;

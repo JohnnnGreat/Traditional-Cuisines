@@ -68,7 +68,7 @@ const Register = async (req, res, next) => {
 
 const GetUser = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
+
   try {
     const user = await User.findById(id);
     if (!user)
@@ -112,7 +112,6 @@ const UploadProfilePic = async (req, res, next) => {
 };
 
 const GenerateCode = async (req, res) => {
-  console.log(req.body);
   try {
     const { email, _id } = req.body;
 
@@ -141,7 +140,7 @@ const GenerateCode = async (req, res) => {
         }
       );
       // updateUser.save();
-      console.log(updateUser);
+
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
