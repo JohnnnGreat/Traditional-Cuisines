@@ -5,8 +5,11 @@ import { useParams } from "next/navigation";
 import { list } from "postcss";
 import Link from "next/link";
 import AxiosInstance from "../axiosInstance";
+import Preloader from "@/components/Preloader";
 
 const Search = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,10 +18,12 @@ const Search = () => {
   const [cuisines, setCuisines] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     const searchQ = router.query.foodName;
     (async function () {
       try {
         const response = await AxiosInstance.get("/cuisines/approvedcuisines");
+        setIsLoading(false);
         const { data } = response;
         const { cuisines } = data;
 
@@ -30,6 +35,7 @@ const Search = () => {
         console.log(result);
         setSearchResult(result);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     })();
@@ -68,54 +74,63 @@ const Search = () => {
   }
 
   return (
-    <div className="search">
-      <div className="search__wrapper">
-        <h1 className="search-title">
-          Search Results for <span>{router.query.foodName}</span>
-        </h1>
-        {searchResult.length > 0 ? (
-          <>
-            <div className="search-container">
-              {searchResult.map((item) => (
-                <div key={item.id} className="food_card">
-                  <img
-                    src={item.imageUrl}
-                    alt="Alt"
-                    className="food_image object-cover"
-                  />
-                  <h1 className="food-tag">{item.name}</h1>
-                  <p className="food-desc">{truncateText(item.description)}</p>
+    <>
+      {isLoading && <Preloader />}
+      <div className="search">
+        <div className="search__wrapper">
+          <h1 className="search-title">
+            Search Results for <span>{router.query.foodName}</span>
+          </h1>
+          {searchResult.length > 0 ? (
+            <>
+              <div className="search-container">
+                {searchResult.map((item) => (
+                  <div key={item.id} className="food_card">
+                    <img
+                      src={item.imageUrl}
+                      alt="Alt"
+                      className="food_image object-cover"
+                    />
+                    <h1 className="food-tag">{item.name}</h1>
+                    <p className="food-desc">
+                      {truncateText(item.description)}
+                    </p>
 
-                  <div className="food-ingredients">
-                    <h1>Ingredients</h1>
-                    <ul className="food-grid">
-                      {item.ingredients.length >= 5
-                        ? item.ingredients
-                            .slice(0, 3)
-                            .map((item) => <li>{truncateText(item, true)}</li>)
-                        : item.ingredients
-                            .slice(0, 5)
-                            .map((item) => <li>{truncateText(item, true)}</li>)}
-                    </ul>
+                    <div className="food-ingredients">
+                      <h1>Ingredients</h1>
+                      <ul className="food-grid">
+                        {item.ingredients.length >= 5
+                          ? item.ingredients
+                              .slice(0, 3)
+                              .map((item) => (
+                                <li>{truncateText(item, true)}</li>
+                              ))
+                          : item.ingredients
+                              .slice(0, 5)
+                              .map((item) => (
+                                <li>{truncateText(item, true)}</li>
+                              ))}
+                      </ul>
+                    </div>
+                    <div className="view_more">
+                      <Link href={`/food?name=${item.name}`}>Read More</Link>
+                    </div>
                   </div>
-                  <div className="view_more">
-                    <Link href={`/food?name=${item.name}`}>Read More</Link>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="empty_food">
+              <h1>No Item found</h1>
+              <p>
+                Login to add this food item.{" "}
+                <Link href={"/auth/login"}>Login Here</Link>
+              </p>
             </div>
-          </>
-        ) : (
-          <div className="empty_food">
-            <h1>No Item found</h1>
-            <p>
-              Login to add this food item.{" "}
-              <Link href={"/auth/login"}>Login Here</Link>
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
