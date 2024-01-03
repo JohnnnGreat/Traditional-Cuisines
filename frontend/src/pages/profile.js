@@ -77,48 +77,48 @@ const Profile = () => {
   const GenerateToken = async () => {
     if (JSON.parse(localStorage.getItem("data"))) {
       var data = JSON.parse(localStorage.getItem("data"));
-    }
 
-    const { _id, email } = data;
+      const { _id, email } = data;
 
-    try {
-      const response = await AxiosInstance.post("/users/generateCode", {
-        _id,
-        email,
-      });
-      console.log(response);
+      try {
+        const response = await AxiosInstance.post("/users/generateCode", {
+          _id,
+          email,
+        });
+        console.log(response);
 
-      const { data } = response;
-      const { success } = data;
-      console.log(success);
-      if (success) {
-        setLinkSent(true);
+        const { data } = response;
+        const { success } = data;
+        console.log(success);
+        if (success) {
+          setLinkSent(true);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("data"))) {
       var data = JSON.parse(localStorage.getItem("data"));
+
+      const { _id } = data;
+      (async function () {
+        try {
+          const response = await AxiosInstance.get(
+            `/cuisines/getcuisines/${_id}`
+          );
+
+          const { data } = response;
+          const { cuisines } = data;
+
+          setUserAddedCuisines(cuisines);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
     }
-
-    const { _id } = data;
-    (async function () {
-      try {
-        const response = await AxiosInstance.get(
-          `/cuisines/getcuisines/${_id}`
-        );
-
-        const { data } = response;
-        const { cuisines } = data;
-
-        setUserAddedCuisines(cuisines);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
   }, [userAddedCuisines]);
 
   const [isEdit, setIsEdit] = useState(false);

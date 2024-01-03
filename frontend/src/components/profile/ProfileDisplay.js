@@ -98,11 +98,10 @@ const ProfileDisplay = ({ setEmailVerified, setIsVerified }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("Start2");
-        console.log(response);
-
         const { success, userData } = response.data;
-        console.log(userData.verified);
+        console.log(userData);
+
+        localStorage.setItem("data", JSON.stringify(userData));
         if (userData.verified) {
           setEmailVerified(true);
         }

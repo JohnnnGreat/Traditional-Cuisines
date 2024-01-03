@@ -41,8 +41,7 @@ const Authentication = ({ registerSec, data }) => {
         const { token, data, message, success } = response.data;
         console.log(token, data, message, success);
         toast.success(message);
-        console.log(response.data);
-        console.log(data);
+      
         localStorage.setItem("data", JSON.stringify(data));
         // localStorage.setItem("token", token);
 

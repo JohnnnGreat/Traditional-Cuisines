@@ -2,6 +2,8 @@ import React, { isValidElement, useEffect, useState } from "react";
 import { nav } from "@/data/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { RiMenu3Fill } from "react-icons/ri";
+import { AiOutlineClose } from "react-icons/ai";
 
 const Header = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -13,7 +15,7 @@ const Header = () => {
       if (localStorage.getItem("data")) {
         setIsValidated(true);
 
-        const user = JSON.parse(localStorage.getItem("data"));
+        const user = JSON?.parse(localStorage.getItem("data"));
         const { profilePic } = user;
 
         setUserProfilePic(profilePic);
@@ -49,13 +51,20 @@ const Header = () => {
                 setNavOpen(false);
               }}
             >
-              close
+              <AiOutlineClose size={30} />
             </button>
             <nav>
               <ul>
                 {nav.map((item, index) => (
                   <li>
-                    <Link className="link-nav" key={index} href={item.path}>
+                    <Link
+                      className="link-nav"
+                      key={index}
+                      onClick={() => {
+                        setNavOpen(false);
+                      }}
+                      href={item.path}
+                    >
                       {item.name}
                     </Link>
                   </li>
@@ -63,12 +72,23 @@ const Header = () => {
               </ul>
             </nav>
             {!isValidated ? (
-              <Link className="nav-lgn" href={"/auth/register"}>
+              <Link
+                className="nav-lgn"
+                onClick={() => {
+                  setNavOpen(false);
+                }}
+                href={"/auth/register"}
+              >
                 Signup
               </Link>
             ) : (
               <div className="logout">
-                <Link href={"/profile"}>
+                <Link
+                  onClick={() => {
+                    setNavOpen(false);
+                  }}
+                  href={"/profile"}
+                >
                   {" "}
                   <img src={userProfilePic} alt="user profile pic" />
                 </Link>
@@ -83,7 +103,7 @@ const Header = () => {
               setNavOpen(true);
             }}
           >
-            menu
+            <RiMenu3Fill size={30} />
           </button>
         </div>
       </div>
