@@ -150,8 +150,8 @@ const GenerateCode = async (req, res) => {
       });
 
       const mailData = {
-        from: `johnossai20@gmail.com`,
-        to: "JOHN OSSAI <johnossai20@gmail.com>",
+        from: "JOHN OSSAI <johnossai20@gmail.com>",
+        to: `<${email}>`,
         subject: `Verify Email Address`,
         html: `Click the link to verify http://localhost:3000/profile?code=${stringRepresentation}`,
       };
