@@ -153,7 +153,7 @@ const GenerateCode = async (req, res) => {
         from: "VERIFY EMAIL ADDRESS <johnossai20@gmail.com>",
         to: `<${email}>`,
         subject: `Verify Email Address`,
-        html: `Click the link to verify http://localhost:3000/profile?code=${stringRepresentation}`,
+        html: `Click the link to verify https://soulfood-sepia.vercel.app/profile?code=${stringRepresentation}`,
       };
 
       await transporter.sendMail(mailData);
