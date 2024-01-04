@@ -39,11 +39,13 @@ const Header = () => {
     <header className="header">
       <div className="header__wrapper">
         <div className="header_flex">
-          <div className="logo">
-            <h1>
-              Soul<span>Food.</span>
-            </h1>
-          </div>
+          <Link href="/">
+            <div className="logo">
+              <h1>
+                Soul<span>Food.</span>
+              </h1>
+            </div>
+          </Link>
           <div className={`main ${navOpen && "opennav"} `}>
             <button
               className="close-btn"

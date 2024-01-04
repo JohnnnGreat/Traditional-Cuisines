@@ -113,7 +113,7 @@ const Search = () => {
                       </ul>
                     </div>
                     <div className="view_more">
-                      <Link href={`/food?name=${item.name}`}>Read More</Link>
+                      <Link href={`/food?id=${item._id}`}>Read More</Link>
                     </div>
                   </div>
                 ))}

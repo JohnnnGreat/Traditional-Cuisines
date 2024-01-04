@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   AddCuisine,
+  GetCuisine,
   GetCuisines,
   GetUnapprovedCuisines,
   VerifyCuisine,
@@ -36,6 +37,7 @@ const router = express.Router();
 // router.get("/getcuisines/:name", GetCuisine);
 router.post("/addcuisines", upload.single("image"), AddCuisine);
 router.get("/getcuisines/:id", GetCuisines);
+router.get("/getcuisine/:id", GetCuisine);
 router.get("/getunapprovedcuisines", GetUnapprovedCuisines);
 router.put("/verifycuisine/:id", VerifyCuisine);
 router.get("/getallprofilecuisines/:id", GetAllProfileCuisines);

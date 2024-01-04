@@ -37,11 +37,7 @@ async function AddExternalCuisines() {
         user: "Admin",
       });
     });
-
-    console.log("Cuisines added ");
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 async function Update() {
   try {
@@ -49,33 +45,31 @@ async function Update() {
       { approved: false },
       { approved: true }
     );
-
-    console.log(cuisines);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 // Update();
 // AddExternalCuisines();
-const GetCuisine = async (req, res) => {
+const GetCuisine = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const cuisine = await Cuisine.find({ id });
+    const cuisine = await Cuisines.findOne({ _id: id });
+
     res.status(200).json({ message: "Cuisine Fetched Succesfully", cuisine });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
-const GetCuisines = async (req, res) => {
+const GetCuisines = async (req, res, next) => {
   try {
     const { id } = req.params;
     const cuisines = await Cuisines.find({ user: id });
+
     res.status(200).json({ message: "Cuisines Fetched Succesfully", cuisines });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
@@ -85,7 +79,7 @@ const getCuisinesCat = (req, res) => {
   } catch (error) {}
 };
 
-const AddCuisine = async (req, res) => {
+const AddCuisine = async (req, res, next) => {
   try {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
@@ -101,12 +95,11 @@ const AddCuisine = async (req, res) => {
       imageUrl: secure_url,
     });
 
-    console.log(addedCuisines);
     res
       .status(200)
       .json({ message: "Form Received Succesfully", file: secure_url });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
@@ -207,6 +200,7 @@ const GetAllProfileCuisines = async (req, res) => {
     const { id } = req.params;
 
     const cuisines = await Cuisines.find({ user: id });
+
     res
       .status(200)
       .json({ message: "Retrieved Succesfully", cuisines: cuisines });

@@ -5,7 +5,7 @@ $semi-gray: #7c7c7c;
 
 .hero {
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   padding: 1rem;
   overflow: hidden;
 
@@ -257,7 +257,7 @@ $semi-gray: #7c7c7c;
   &__wrapper {
     max-width: 1200px;
     margin: auto;
-
+    padding: 1rem;
     img {
       height: 400px;
       width: 100%;
@@ -682,16 +682,106 @@ $semi-gray: #7c7c7c;
     position: relative;
 
     .cuisine-c-d {
-      background: #00000033;
-
+      background: #00000000;
+      overflow: hidden !important;
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
       width: 100%;
       z-index: 30;
+      transition: 300ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
   img {
   }
+}
+
+.ha {
+  height: 200px;
+  overflow: hidden;
+  background-color: #e59700;
+  &__wrapper {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    h1 {
+      color: #1d0606;
+      font-size: 60px;
+      text-transform: uppercase;
+      font-weight: 500;
+
+      @media (max-width: 567px) {
+        font-size: 45px;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+.about-p {
+  .wrapper-p {
+    max-width: 900px;
+    margin: auto;
+    padding: 1rem;
+
+    p {
+      color: rgb(48, 48, 48);
+      font-weight: 300;
+      margin-top: 1rem;
+    }
+
+    a {
+      text-decoration: underline;
+      display: block;
+      margin-top: 1rem;
+    }
+  }
+}
+
+.container-con {
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+  form {
+    input,
+    textarea {
+      outline: none;
+      display: block;
+      border: 1px solid gray;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      font-weight: 300;
+    }
+
+    button {
+      background: rgb(22, 22, 22);
+      color: #fff;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      font-weight: 300;
+    }
+  }
+}
+.closebtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.sh-o {
+  background: #00000073 !important;
+  transition: 300ms ease;
 }

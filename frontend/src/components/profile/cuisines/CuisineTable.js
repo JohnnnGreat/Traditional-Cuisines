@@ -102,6 +102,7 @@ const CuisineTable = ({ showForm, setShowForm }) => {
       try {
         if (localStorage.getItem("data")) {
           const dataContent = JSON.parse(localStorage.getItem("data"));
+
           const { _id } = dataContent;
 
           const response = await AxiosInstance.get(
@@ -110,9 +111,12 @@ const CuisineTable = ({ showForm, setShowForm }) => {
 
           const { data } = response;
           const { cuisines } = data;
+
           setUserCuisines(cuisines);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     })();
   }, [userCuisines]);
 

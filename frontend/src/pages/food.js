@@ -9,14 +9,7 @@ const FoodItem = () => {
   const router = useRouter();
 
   const [foodName, setFoodName] = useState("");
-  const [foodMain, setFoodMain] = useState({
-    name: "",
-    description: "",
-    method: "",
-    nutrition: "",
-    category: "",
-    time: "",
-  });
+  const [foodMain, setFoodMain] = useState(null);
 
   // useEffect(() => {
   //   setFoodName(foodNameQ);
@@ -36,7 +29,16 @@ const FoodItem = () => {
         console.log(response);
       } catch (error) {}
     })();
-  }, [router.query.name]);
+  }, [router.query.id]);
+  const id = router.query.id;
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await AxiosInstance.get(`/cuisines/getcuisine/${id}`);
+        setFoodMain(response.data.cuisine);
+      } catch (error) {}
+    })();
+  }, [router.query.id]);
 
   const convertArray = (string) => {
     let newArray = [];
@@ -64,7 +66,7 @@ const FoodItem = () => {
     <div className="food-main">
       <div className="food-main__wrapper">
         <div className="food_display">
-          <img src={foodMain?.image} alt="Alt" className="food_image-main" />
+          <img src={foodMain?.imageUrl} alt="Alt" className="food_image-main" />
           <div className="text_details">
             {" "}
             <h1 className="food_main-name">{foodMain?.name}</h1>

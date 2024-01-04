@@ -4,11 +4,13 @@ import Divider from "@/components/Divider";
 import AxiosInstance from "@/axiosInstance";
 import { Masonry } from "react-masonry";
 import Preloader from "@/components/Preloader";
+import Link from "next/link";
 
 const Cuisines = () => {
   const [categories, setCategories] = useState([]);
   const [cuisines, setCuisines] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   useEffect(() => {
     const array = [];
     const categories = foodData.map((item) => {
@@ -41,6 +43,15 @@ const Cuisines = () => {
       }
     })();
   }, []);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
+  console.log(isHover);
   return (
     <>
       {isLoading && <Preloader />}
@@ -52,10 +63,23 @@ const Cuisines = () => {
           <div>
             <div className="first-cuisines">
               <Masonry>
-                {cuisines.map((item) => (
-                  <div className="cuisine-card">
+                {cuisines.map((item, index) => (
+                  <div key={index} className="cuisine-card">
                     <div className="cuisine-img-con">
-                      <div className="cuisine-c-d"></div>
+                      <div
+                        className={`cuisine-c-d ${
+                          hoveredIndex === index ? "sh-o" : "s"
+                        }`}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <Link
+                          className="text-white text-[1.5rem] "
+                          href={`/food/?id=${item._id}`}
+                        >
+                          View Cuisine
+                        </Link>
+                      </div>
                       <img className="cuisine-img" src={item.imageUrl} />
                     </div>
 

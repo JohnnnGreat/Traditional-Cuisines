@@ -16,6 +16,8 @@ $semi-gray: #7c7c7c;
   background: #fff;
   box-shadow: 0 0 5px 5px rgb(235, 235, 235);
   overflow: hidden;
+
+  z-index: 50;
   &__wrapper {
     max-width: 1200px;
     margin: auto;
@@ -27,6 +29,10 @@ $semi-gray: #7c7c7c;
       justify-content: space-between;
       align-items: center;
       height: 100%;
+
+      a {
+        flex-grow: 1;
+      }
     }
 
     .logo {
@@ -212,20 +218,26 @@ $semi-gray: #7c7c7c;
 
 .form-container {
   width: 100%;
-  height: 100vh;
+  height: 150vh;
   position: fixed;
   background: rgba(5, 5, 5, 0.664);
   z-index: 30;
   top: 0;
   left: 0;
+  // bottom: ;
   display: flex;
-  align-items: center;
+
   justify-content: center;
+  overflow-y: scroll;
+  @media (max-width: 567px) {
+    justify-content: flex-start;
+  }
 
   form {
     background-color: #fff;
     width: 700px;
     padding: 2rem;
+    height: 200vh;
 
     @media (max-width: 567px) {
       width: 90%;
