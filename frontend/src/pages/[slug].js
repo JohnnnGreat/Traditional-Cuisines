@@ -1,0 +1,76 @@
+import React from "react";
+import { client } from "../../sanity/lib/client";
+import { PortableText } from "@portabletext/react";
+import groq from "groq";
+import imageUrlBuilder from "@sanity/image-url";
+
+const Blog = ({ post }) => {
+  const {
+    title = "Missing title",
+    name = "Missing name",
+    categories,
+    authorImage,
+    body = [],
+  } = post;
+
+  function urlFor(source) {
+    return imageUrlBuilder(client).image(source);
+  }
+
+  return (
+    <>
+      <div>Titile: {post?.title}</div>
+      {authorImage && (
+        <div>
+          <img
+            src={urlFor(authorImage).width(50).url()}
+            alt={`${name}'s picture`}
+          />
+        </div>
+      )}
+      <PortableText value={post?.body} />
+    </>
+  );
+};
+
+export default Blog;
+
+// export async function getStaticProps() {
+//   const query = `*[_type == "post"]{ _id, title, content, body}`;
+//   const posts = await client.fetch(query);
+
+//   return {
+//     props: {
+//       posts,
+//     },
+//   };
+// }
+
+const query = groq`*[_type == "post" && slug.current == $slug][0]{
+  title,
+  "name": author->name,
+  "categories": categories[]->title,
+  "authorImage": author->image,
+  body
+}`;
+export async function getStaticPaths() {
+  const paths = await client.fetch(
+    groq`*[_type == "post" && defined(slug.current)][].slug.current`
+  );
+
+  return {
+    paths: paths.map((slug) => ({ params: { slug } })),
+    fallback: true,
+  };
+}
+
+export async function getStaticProps(context) {
+  // It's important to default the slug so that it doesn't return "undefined"
+  const { slug = "" } = context.params;
+  const post = await client.fetch(query, { slug });
+  return {
+    props: {
+      post,
+    },
+  };
+}
