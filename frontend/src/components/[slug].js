@@ -36,7 +36,7 @@ const Blog = ({ post }) => {
 
   return (
     <>
-      <div>Titile: {post?.title}</div>
+      <div>Titile: {title}</div>
       {authorImage && (
         <div>
           <img
@@ -45,7 +45,7 @@ const Blog = ({ post }) => {
           />
         </div>
       )}
-      <PortableText value={post?.body} components={ptComponents} />
+      <PortableText value={body} components={ptComponents} />
     </>
   );
 };
