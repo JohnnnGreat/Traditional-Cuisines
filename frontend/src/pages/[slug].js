@@ -17,6 +17,23 @@ const Blog = ({ post }) => {
     return imageUrlBuilder(client).image(source);
   }
 
+  const ptComponents = {
+    types: {
+      image: ({ value }) => {
+        if (!value?.asset?._ref) {
+          return null;
+        }
+        return (
+          <img
+            alt={value.alt || " "}
+            loading="lazy"
+            src={urlFor(value).width(320).height(240).fit("max").auto("format")}
+          />
+        );
+      },
+    },
+  };
+
   return (
     <>
       <div>Titile: {post?.title}</div>
@@ -28,7 +45,7 @@ const Blog = ({ post }) => {
           />
         </div>
       )}
-      <PortableText value={post?.body} />
+      <PortableText value={post?.body} components={ptComponents} />
     </>
   );
 };
