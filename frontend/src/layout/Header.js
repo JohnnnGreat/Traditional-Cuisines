@@ -92,7 +92,11 @@ const Header = () => {
                   href={"/profile"}
                 >
                   {" "}
-                  <img src={userProfilePic} alt="user profile pic" />
+                  <img
+                    src={userProfilePic}
+                    className="w-[100px] inline-block h-[50px] rounded-full"
+                    alt="user profile pic"
+                  />
                 </Link>
 
                 <button onClick={handleLogout}>Logout</button>

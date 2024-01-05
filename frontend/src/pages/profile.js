@@ -14,6 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import ProfileDisplay from "@/components/profile/ProfileDisplay";
 import CuisineTable from "@/components/profile/cuisines/CuisineTable";
+import Head from "next/head";
 
 const Profile = () => {
   const [token, setToken] = useState("");
@@ -242,9 +243,117 @@ const Profile = () => {
       toast.error("An error occured");
     }
   };
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      //   render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+    },
+    {
+      title: "Method",
+      dataIndex: "method",
+    },
 
+    {
+      title: "Ingredients",
+      dataIndex: "ingredients",
+    },
+
+    {
+      title: "Category",
+      dataIndex: "category",
+    },
+
+    {
+      title: "Time",
+      dataIndex: "time",
+    },
+
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <button
+            className="approve-food"
+            onClick={() => {
+              handleDelete(record);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            className="view-food"
+            onClick={() => {
+              handleEdit(record);
+            }}
+          >
+            Edit
+          </button>
+        </Space>
+      ),
+    },
+  ];
+  const [id, setPostId] = useState("");
+  const handleEdit = (record) => {
+    setPostId(record._id);
+
+    setValue("name", record.name);
+    setValue("description", record.description);
+    setValue("method", record.method);
+    setValue("nutrition", record.nutrition);
+    setValue("ingredients", record.ingredients);
+    setValue("category", record.category);
+    setValue("time", record.time);
+    setValue("image", record.imageUrl);
+
+    setIsEdit(true);
+
+    const formValues = getValues();
+
+    setRecord(record);
+    setShowForm(true);
+  };
+  const [userCuisines, setUserCuisines] = useState([]);
+  // Fetched Data from the backend
+  useEffect(() => {
+    (async function () {
+      try {
+        if (localStorage.getItem("data")) {
+          const dataContent = JSON.parse(localStorage.getItem("data"));
+
+          const { _id } = dataContent;
+
+          const response = await AxiosInstance.get(
+            `/cuisines/getallprofilecuisines/${_id}`
+          );
+
+          const { data } = response;
+          const { cuisines } = data;
+
+          setUserCuisines(cuisines);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [userCuisines]);
+
+  // Cuisine Information Fetched from the database are stored here
+  const data = [];
+
+  userCuisines?.map((item) => {
+    data.push(item);
+  });
   return (
     <>
+      <Head>
+        <title>Profile</title>
+      </Head>
       {isLoading && <Preloader />}
       <Toaster />
       {isValidated ? (
@@ -302,7 +411,19 @@ const Profile = () => {
             </div>
           ) : (
             <>
-              <CuisineTable setShowForm={setShowForm} showForm={showForm} />
+              <div className="display_table">
+                <div className="display-table__wrapper">
+                  <button
+                    className="add_cuisine_btn"
+                    onClick={() => {
+                      setShowForm(true);
+                    }}
+                  >
+                    Add a cuisine
+                  </button>
+                  <Table columns={columns} dataSource={data} />
+                </div>
+              </div>
             </>
           )}
         </>

@@ -8,6 +8,7 @@ import Link from "next/link";
 import AxiosInstance from "@/axiosInstance";
 import toast, { Toaster } from "react-hot-toast";
 import ScreenImage from "../../public/ScreenImage.png";
+import Head from "next/head";
 
 export default function Home() {
   const router = useRouter();
@@ -54,6 +55,9 @@ export default function Home() {
   };
   return (
     <>
+      <Head>
+        <title>Homepage | Soul Food</title>
+      </Head>
       <Toaster />
       <main className="hero">
         <div className="hero__wrapper">

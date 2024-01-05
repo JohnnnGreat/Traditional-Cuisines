@@ -4,6 +4,7 @@ import { foodData } from "@/foodData";
 import Divider from "@/components/Divider";
 import Link from "next/link";
 import AxiosInstance from "@/axiosInstance";
+import Head from "next/head";
 
 const FoodItem = () => {
   const router = useRouter();
@@ -63,73 +64,82 @@ const FoodItem = () => {
   }
 
   return (
-    <div className="food-main">
-      <div className="food-main__wrapper">
-        <div className="food_display">
-          <img src={foodMain?.imageUrl} alt="Alt" className="food_image-main" />
-          <div className="text_details">
-            {" "}
-            <h1 className="food_main-name">{foodMain?.name}</h1>
-            <hr />
-            <div className="display_instance">
-              <p className="description">DESCRIPTION</p>
+    <>
+      <Head>
+        <title>{foodMain?.name}</title>
+      </Head>
+      <div className="food-main">
+        <div className="food-main__wrapper">
+          <div className="food_display">
+            <img
+              src={foodMain?.imageUrl}
+              alt="Alt"
+              className="food_image-main"
+            />
+            <div className="text_details">
+              {" "}
+              <h1 className="food_main-name">{foodMain?.name}</h1>
               <hr />
-              <p className="actual_desc">{foodMain?.description}</p>
-            </div>
-            <div className="display_instance">
-              <p className="description">METHOD OF PREPARATION</p>
-              <hr />
-              <ul>
-                {convertArray(foodMain?.method).map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
+              <div className="display_instance">
+                <p className="description">DESCRIPTION</p>
+                <hr />
+                <p className="actual_desc">{foodMain?.description}</p>
+              </div>
+              <div className="display_instance">
+                <p className="description">METHOD OF PREPARATION</p>
+                <hr />
+                <ul>
+                  {convertArray(foodMain?.method).map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
 
-              {/* <p className="actual_desc">{convertArray(foodMain.method)}</p> */}
-            </div>
-            <div className="display_instance">
-              <p className="description">NUTRITIONAL INFORMATION</p>
-              <hr />
+                {/* <p className="actual_desc">{convertArray(foodMain.method)}</p> */}
+              </div>
+              <div className="display_instance">
+                <p className="description">NUTRITIONAL INFORMATION</p>
+                <hr />
 
-              <table>
-                <thead>
-                  <tr>
-                    {convertObject(foodMain?.nutrition).map((item) => (
-                      <th>{item.name}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    {convertObject(foodMain?.nutrition).map((item) => (
-                      <td>{item.value}</td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="display_instance">
-              <p className="description">CATEGORY</p>
-              <hr />
-              <p className="actual_desc">{foodMain?.category}</p>
-            </div>
-            <div className="display_instance">
-              <p className="description">TOTAL TIME FOR PREPARATION</p>
-              <hr />
-              <p className="actual_desc">{foodMain?.time}</p>
-            </div>
-            <div className="link">
-              <Link
-                target="_blank"
-                href={`https://www.youtube.com/results?search_query= How to prepare ${foodMain?.name}`}
-              >
-                Click Here <p>To watch a video online</p>
-              </Link>
+                <table>
+                  <thead>
+                    <tr>
+                      {convertObject(foodMain?.nutrition).map((item) => (
+                        <th>{item.name}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      {convertObject(foodMain?.nutrition).map((item) => (
+                        <td>{item.value}</td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="display_instance">
+                <p className="description">CATEGORY</p>
+                <hr />
+                <p className="actual_desc">{foodMain?.category}</p>
+              </div>
+              <div className="display_instance">
+                <p className="description">TOTAL TIME FOR PREPARATION</p>
+                <hr />
+                <p className="actual_desc">{foodMain?.time}</p>
+              </div>
+              <div className="link">
+                <Link
+                  target="_blank"
+                  href={`https://www.youtube.com/results?search_query= How to prepare ${foodMain?.name}`}
+                >
+                  Click Here <p>To watch a video online</p>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

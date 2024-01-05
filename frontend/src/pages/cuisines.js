@@ -5,6 +5,7 @@ import AxiosInstance from "@/axiosInstance";
 import { Masonry } from "react-masonry";
 import Preloader from "@/components/Preloader";
 import Link from "next/link";
+import Head from "next/head";
 
 const Cuisines = () => {
   const [categories, setCategories] = useState([]);
@@ -54,6 +55,9 @@ const Cuisines = () => {
   console.log(isHover);
   return (
     <>
+      <Head>
+        <title>Cuisines</title>
+      </Head>
       {isLoading && <Preloader />}
       <div className="cuisines">
         <div className="cuisines__wrapper">

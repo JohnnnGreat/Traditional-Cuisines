@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Layout from "./layout";
 import Divider from "@/components/Divider";
 import AxiosInstance from "@/axiosInstance";
@@ -7,10 +7,12 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { Table, Space } from "antd";
 import { foodData } from "@/foodData";
 import { message } from "antd";
+import { Bar } from "react-chartjs-2";
 // import jsPDF from "jspdf";
 // import html2canvas from "html2canvas";
-// import  html2pdf  from "html2pdf.js";
+// import html2pdf from "html2pdf.js";
 import Preloader from "@/components/Preloader";
+import Chart from "chart.js/auto/auto";
 
 const Index = () => {
   const [cuisines, setCuisines] = useState([]);
@@ -57,15 +59,15 @@ const Index = () => {
     }
   };
 
-  // const exportPdf = () => {
-  //   const input = document.getElementById("table-display"); // replace with your HTML element ID
-  //   // html2canvas(input).then((canvas) => {
-  //   //   const pdf = new jsPDF("p", "mm", "a4");
-  //   //   pdf.addImage(canvas.toDataURL("image/png")); // adjust size as needed
-  //   //   pdf.save("your-file-name.pdf");
-  //   // });
-  //   html2pdf(input);
-  // };
+  const exportPdf = () => {
+    // const input = document.getElementById("table-display"); // replace with your HTML element ID
+    // // html2canvas(input).then((canvas) => {
+    // //   const pdf = new jsPDF("p", "mm", "a4");
+    // //   pdf.addImage(canvas.toDataURL("image/png")); // adjust size as needed
+    // //   pdf.save("your-file-name.pdf");
+    // // });
+    // html2pdf(input);
+  };
 
   const viewFood = () => {};
   const columns = [
@@ -121,9 +123,45 @@ const Index = () => {
     data.push(item);
   });
 
+  const chartRef = useRef(null);
+  const [length, setLength] = useState(0);
+  useEffect(() => {
+    (async function () {
+      const response = await AxiosInstance.get("/users/getusers");
+
+      setLength(response.data.data.length);
+      console.log(response.data.data.length);
+    })();
+  });
+
+  const chartData = {
+    labels: ["Total Users"],
+    datasets: [
+      {
+        label: "Number of Registered Users",
+        data: [length],
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      x: {
+        type: "category",
+        labels: ["Category 1", "Category 2", "Category 3"],
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <>
-      <div>You are yet to verify your account</div>
+      {/* <div>You are yet to verify your account</div> */}
       {showLoader && <Preloader />}
       <div className="admin">
         <Layout>
@@ -142,7 +180,12 @@ const Index = () => {
             </div>
             {/* <button onClick={exportPdf}>Export Pdf</button> */}
             <div className="table-display" id="table-display">
+              {/* <button onClick={exportPdf}>Export</button> */}
               <Table dataSource={data} columns={columns} />
+            </div>
+            <div>
+              <h2>Total Registered Users</h2>
+              <Bar data={chartData} options={options} />
             </div>
           </div>
         </Layout>

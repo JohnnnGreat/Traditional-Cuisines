@@ -347,3 +347,16 @@ $semi-gray: #7c7c7c;
     display: block;
   }
 }
+
+.footer {
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(243, 243, 243);
+  &__wrapper {
+    h1 {
+      font-size: 0.9rem;
+    }
+  }
+}

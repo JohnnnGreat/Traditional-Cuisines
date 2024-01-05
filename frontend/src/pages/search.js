@@ -6,6 +6,7 @@ import { list } from "postcss";
 import Link from "next/link";
 import AxiosInstance from "../axiosInstance";
 import Preloader from "@/components/Preloader";
+import Head from "next/head";
 
 const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -75,6 +76,9 @@ const Search = () => {
 
   return (
     <>
+      <Head>
+        <title>{router.query.foodName}</title>
+      </Head>
       {isLoading && <Preloader />}
       <div className="search">
         <div className="search__wrapper">
