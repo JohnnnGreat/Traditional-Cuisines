@@ -9,9 +9,8 @@ const Header = () => {
   const [isValidated, setIsValidated] = useState(false);
   const [userProfilePic, setUserProfilePic] = useState("");
   const router = useRouter();
-
+  const [adminLogged, setAdminLogged] = useState(false);
   useEffect(() => {
-    const [adminLogged, setAdminLogged] = useState(false);
     if (localStorage.getItem("token")) {
       if (localStorage.getItem("data")) {
         setIsValidated(true);
@@ -28,9 +27,13 @@ const Header = () => {
     }
   });
 
-  if (localStorage?.getItem("adminLoggedIn") !== undefined) {
-    setAdminLogged(true);
-  }
+  useEffect(() => {
+    if (localStorage?.getItem("adminLoggedIn") !== undefined) {
+      setAdminLogged(true);
+    } else {
+      setAdminLogged(false);
+    }
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -78,7 +81,7 @@ const Header = () => {
                 ))}
               </ul>
             </nav>
-            {adminLogged ? (
+            {!adminLogged ? (
               <h1>Admin</h1>
             ) : !isValidated ? (
               <Link

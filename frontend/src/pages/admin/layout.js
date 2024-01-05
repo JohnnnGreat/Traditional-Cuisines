@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
             </nav>
             <div
               onClick={() => {
-                localStorage.removeItem("adminLoggedIn");
+                localStorage.setItem("adminLoggedIn", false);
                 navigate.push("/");
               }}
               className="admin-logout"
