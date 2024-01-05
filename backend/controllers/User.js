@@ -81,12 +81,12 @@ const GetUser = async (req, res, next) => {
   }
 };
 
-const GetAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    console.log(users);
-  } catch (error) {}
-};
+// const GetAllUsers = async (req, res) => {
+//   try {
+//     const users = await User.find();
+//     console.log(users);
+//   } catch (error) {}
+// };
 
 const UploadProfilePic = async (req, res, next) => {
   const { id } = req.params;
@@ -239,6 +239,115 @@ const VerifyUser = async (req, res) => {
   }
 };
 
+async function sendContactMessage(req, res) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "johnossai20@gmail.com",
+        pass: "kblgyogjwalbiwja",
+      },
+    });
+    const mailData = {
+      from: `New contact message <${req.body.email}>`,
+      to: "JOHN <johnossai20@gmail.com>",
+      subject: `Message From ${req.body.name}`,
+
+      html: ` <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Contact Form Submission</title>
+          <style>
+              body {
+                  font-family: 'Arial', sans-serif;
+                  background-color: #f4f4f4;
+                  margin: 0;
+                  padding: 0;
+              }
+      
+              .container {
+                  max-width: 600px;
+                  margin: 50px auto;
+                  background-color: #fff;
+                  padding: 20px;
+                  border-radius: 8px;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+              }
+      
+              h2 {
+                  color: #000;
+                  border-bottom: 2px solid #3498db;
+                  padding-bottom: 10px;
+                  font-size:2rem;
+              }
+      
+              p {
+                  color: #666;
+                  line-height: 1;
+                  font-size:1rem;
+              }
+      
+              .user-info {
+                  margin-bottom: 20px;
+              }
+      
+              .info-label {
+                  font-weight: bold;
+                  color: #333;
+                  font-size:1.5rem;
+              }
+      
+              .info-value {
+                  color: #3498db;
+                  font-size:1.21rem;
+              }
+      
+              .message {
+                  margin-top: 20px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h2>Contact Form Submission</h2>
+              <p>Below are the details of a new contact form submission:</p>
+      
+              <div class="user-info">
+              
+      
+                  <p class="info-label">Email:</p>
+                  <p class="info-value">${req.body.email}</p>
+              </div>
+      
+              <p class="info-label">Message:</p>
+              <p class="message">${req.body.messagev}</p>
+          </div>
+      </body>
+      </html>`,
+    };
+
+    await transporter.sendMail(mailData);
+
+    res
+      .status(200)
+      .json({ message: "Message sent succesfully", success: true });
+    console.log(rew.body);
+  } catch (error) {
+    
+  }
+}
+
+async function GetAllUsers(req, res, next) {
+  try {
+    const data = await User.find();
+    res.status(200).json({ data });
+  } catch (error) {
+    next(error.message);
+  }
+}
+
 function GenerateRandomValues() {
   const randomBytes = crypto.randomBytes(1); // Use 1 byte for a number between 0 and 255
   const randomNumber = randomBytes.readUInt8(0);
@@ -254,4 +363,6 @@ module.exports = {
   UploadProfilePic,
   GenerateCode,
   VerifyUser,
+  sendContactMessage,
+  GetAllUsers,
 };
