@@ -11,6 +11,7 @@ const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const [adminLogged, setAdminLogged] = useState(false);
     if (localStorage.getItem("token")) {
       if (localStorage.getItem("data")) {
         setIsValidated(true);
@@ -26,6 +27,10 @@ const Header = () => {
       setIsValidated(false);
     }
   });
+
+  if (localStorage?.getItem("adminLoggedIn") !== undefined) {
+    setAdminLogged(true);
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -73,7 +78,9 @@ const Header = () => {
                 ))}
               </ul>
             </nav>
-            {!isValidated ? (
+            {adminLogged ? (
+              <h1>Admin</h1>
+            ) : !isValidated ? (
               <Link
                 className="nav-lgn"
                 onClick={() => {

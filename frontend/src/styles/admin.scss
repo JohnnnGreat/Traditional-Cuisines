@@ -1,23 +1,43 @@
 .layout {
-  background-color: red;
-  height: 100vh;
+  .grid-wide {
+    grid-template-columns: 40% 80%;
+    transition: 300ms ease;
+  }
 
   &__grid {
     display: grid;
     grid-template-columns: 20% 80%;
     height: 100%;
+    overflow: hidden;
+    transition: 300ms ease;
+
+    @media (max-width: 567px) {
+      grid-template-columns: 0% 100%;
+    }
 
     .layout_first {
       background-color: rgb(243, 243, 243);
       height: 100%;
       padding: 3rem 0.7rem;
+      overflow: hidden;
+
+      @media (max-width: 567px) {
+        padding: 0;
+      }
 
       .first_l_container {
         height: 100%;
         position: relative;
+        padding: 0.8rem;
         .admin-header {
           font-size: 2rem;
           line-height: 1;
+          margin-top: 2rem;
+
+          @media (max-width: 567px) {
+            font-size: 1rem;
+            margin-top: 3rem !important;
+          }
         }
 
         .admin-logout {
@@ -122,5 +142,19 @@
 
   &:hover {
     background-color: rgb(45, 66, 255);
+  }
+}
+.card-dou {
+  padding: 2rem;
+  background: rgb(250, 250, 250);
+  border-radius: 10px;
+}
+
+.ad-btn {
+  display: none;
+  position: absolute;
+  left: 1rem;
+  @media (max-width: 567px) {
+    display: block;
   }
 }

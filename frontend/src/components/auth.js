@@ -41,7 +41,7 @@ const Authentication = ({ registerSec, data }) => {
         const { token, data, message, success } = response.data;
         console.log(token, data, message, success);
         toast.success(message);
-      
+
         localStorage.setItem("data", JSON.stringify(data));
         // localStorage.setItem("token", token);
 
@@ -62,7 +62,7 @@ const Authentication = ({ registerSec, data }) => {
 
         localStorage.setItem("data", JSON.stringify(data));
         localStorage.setItem("token", token);
-
+        localStorage.removeItem("adminLoggedIn");
         if (success) {
           router.push("/profile");
         }

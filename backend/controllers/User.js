@@ -240,6 +240,7 @@ const VerifyUser = async (req, res) => {
 };
 
 async function sendContactMessage(req, res) {
+  const { email, message } = req.body;
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -334,9 +335,7 @@ async function sendContactMessage(req, res) {
       .status(200)
       .json({ message: "Message sent succesfully", success: true });
     console.log(rew.body);
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 }
 
 async function GetAllUsers(req, res, next) {

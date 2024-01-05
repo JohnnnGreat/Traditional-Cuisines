@@ -1,10 +1,15 @@
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { RiMenu3Fill } from "react-icons/ri";
 
 const Layout = ({ children }) => {
+  const navigate = useRouter();
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
     <div className="layout">
-      <div className="layout__grid">
+      <div className={`layout__grid ${navOpen && "grid-wide"}`}>
         <div className="layout_first">
           <div className="first_l_container">
             <h1 className="admin-header">Admin Dashboard</h1>
@@ -25,12 +30,29 @@ const Layout = ({ children }) => {
                 </li>
               </ul>
             </nav>
-            <div className="admin-logout">
+            <div
+              onClick={() => {
+                localStorage.removeItem("adminLoggedIn");
+                navigate.push("/");
+              }}
+              className="admin-logout"
+            >
               <button>Logout</button>
             </div>
           </div>
         </div>
-        <div className="layout_second">{children}</div>
+        <div className="layout_second">
+          <button
+            className="ad-btn"
+            onClick={() => {
+              setNavOpen(!navOpen);
+            }}
+          >
+            <RiMenu3Fill size={30} />
+          </button>
+
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -7,16 +7,18 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { Table, Space } from "antd";
 import { foodData } from "@/foodData";
 import { message } from "antd";
-import { Bar } from "react-chartjs-2";
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas";
-// import html2pdf from "html2pdf.js";
+import { Doughnut } from "react-chartjs-2";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+// import { html2pdf } from "html2pdf.js";
 import Preloader from "@/components/Preloader";
 import Chart from "chart.js/auto/auto";
 
 const Index = () => {
   const [cuisines, setCuisines] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+
+  const chartRef = useRef(null);
 
   useEffect(() => {
     const { _id } = JSON.parse(localStorage.getItem("data"));
@@ -59,14 +61,16 @@ const Index = () => {
     }
   };
 
+  const printSec = useRef(null);
   const exportPdf = () => {
-    // const input = document.getElementById("table-display"); // replace with your HTML element ID
-    // // html2canvas(input).then((canvas) => {
-    // //   const pdf = new jsPDF("p", "mm", "a4");
-    // //   pdf.addImage(canvas.toDataURL("image/png")); // adjust size as needed
-    // //   pdf.save("your-file-name.pdf");
-    // // });
-    // html2pdf(input);
+    html2canvas(printSec.current).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+      pdf.save("information.pdf");
+    });
   };
 
   const viewFood = () => {};
@@ -123,7 +127,6 @@ const Index = () => {
     data.push(item);
   });
 
-  const chartRef = useRef(null);
   const [length, setLength] = useState(0);
   useEffect(() => {
     (async function () {
@@ -140,7 +143,7 @@ const Index = () => {
       {
         label: "Number of Registered Users",
         data: [length],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        backgroundColor: "#e59700",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
@@ -148,14 +151,20 @@ const Index = () => {
   };
 
   const options = {
+    rotation: 270,
+    circumference: 270,
+    responsive: true,
+    maintainAspectRatio: true,
+    width: "100",
+    height: "100px",
     scales: {
-      x: {
-        type: "category",
-        labels: ["Category 1", "Category 2", "Category 3"],
-      },
-      y: {
-        beginAtZero: true,
-      },
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
     },
   };
 
@@ -163,7 +172,7 @@ const Index = () => {
     <>
       {/* <div>You are yet to verify your account</div> */}
       {showLoader && <Preloader />}
-      <div className="admin">
+      <div className="admin" ref={printSec}>
         <Layout>
           <div className="admin-wrapper">
             <h1 className="food-request">Food Requests</h1>
@@ -178,14 +187,19 @@ const Index = () => {
                 {/* <div className="notification-dot"></div> */}
               </div>
             </div>
-            {/* <button onClick={exportPdf}>Export Pdf</button> */}
+            <button
+              className="p-[1rem] border-1 border-red-500 underline"
+              onClick={exportPdf}
+            >
+              Export Pdf
+            </button>
             <div className="table-display" id="table-display">
               {/* <button onClick={exportPdf}>Export</button> */}
               <Table dataSource={data} columns={columns} />
             </div>
-            <div>
+            <div className="w-[300px] card-dou">
               <h2>Total Registered Users</h2>
-              <Bar data={chartData} options={options} />
+              <Doughnut ref={chartRef} data={chartData} options={options} />
             </div>
           </div>
         </Layout>
