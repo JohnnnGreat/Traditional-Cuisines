@@ -36,6 +36,8 @@ const Profile = () => {
   const [isVerified, setIsVerified] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(null);
+
+  
   const handleFile = (e) => {
     setFile(e.target.files[0]);
 

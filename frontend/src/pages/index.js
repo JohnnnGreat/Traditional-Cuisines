@@ -56,7 +56,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Homepage | Soul Food</title>
+        <title>Homepage | Heritage Hub</title>
       </Head>
       <Toaster />
       <main className="hero">
