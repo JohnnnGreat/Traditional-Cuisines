@@ -50,7 +50,7 @@ const Header = () => {
           <Link href="/">
             <div className="logo">
               <h1>
-                Soul<span>Food.</span>
+              Heritage <span>Hub.</span>
               </h1>
             </div>
           </Link>
