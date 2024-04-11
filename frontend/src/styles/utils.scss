@@ -26,7 +26,7 @@ $semi-gray: #7c7c7c;
 
     .header_flex {
       display: flex;
-      justify-content: space-between;
+
       align-items: center;
       height: 100%;
 
@@ -54,7 +54,7 @@ $semi-gray: #7c7c7c;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-grow: 1;
+      gap: 2rem;
       height: 100%;
 
       @media (max-width: 567px) {
@@ -113,6 +113,7 @@ $semi-gray: #7c7c7c;
         color: #fff;
         padding: 0.8rem 2rem;
         border-radius: 10px;
+        display: inline-block;
       }
 
       .logout {
