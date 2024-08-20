@@ -42,18 +42,6 @@ const Search = () => {
     })();
   }, [router.query.foodName, isEmpty]);
 
-  // useEffect(() => {
-  //   const searchQ = router.query.foodName;
-
-  //   const result = foodData.filter((foodItem) => {
-  //     const foodsItem = foodItem.name.toLowerCase();
-  //     return foodsItem.includes(searchQ);
-  //   });
-
-  //   setSearchResult(result);
-  //   console.log(searchResult.length);
-  //   setIsEmpty(result ? false : true);
-  // }, [router.query.foodName, isEmpty]);
 
   // TODO: create a truncated text
   function truncateText(text, listItem = false) {
